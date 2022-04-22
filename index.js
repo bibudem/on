@@ -12,9 +12,9 @@ const flash = require("connect-flash");
 const querystring = require("querystring");
 const assets = require("./assets");
 const archiver = require("archiver");
+const config = require('config')
 
 const notp = require("notp");
-const base32 = require("thirty-two");
 
 const fs = require("fs");
 const rimraf = require("rimraf");
@@ -24,7 +24,11 @@ const filesize = require("filesize");
 const octicons = require("@primer/octicons");
 const handlebars = require("handlebars");
 
-const port = +process.env.PORT || 8080;
+const console = require('./lib/console')
+
+const port = config.get('server.port');
+
+const manifestStoreRouter = require('./routes/manifest-store')
 
 const app = express();
 const http = app.listen(port);
@@ -71,6 +75,8 @@ app.engine(
 );
 app.set("view engine", "handlebars");
 
+app.use('/manifest-store', manifestStoreRouter)
+
 app.use("/@assets", express.static(path.join(__dirname, "assets")));
 // init assets
 assets.forEach((asset) => {
@@ -83,7 +89,7 @@ assets.forEach((asset) => {
 
 app.use(
   session({
-    secret: process.env.SESSION_KEY || "meowmeow",
+    secret: config.get('server.session'),
     resave: false,
     saveUninitialized: false,
   })
@@ -97,9 +103,7 @@ app.use(
 );
 // AUTH
 
-const KEY = process.env.KEY
-  ? base32.decode(process.env.KEY.replace(/ /g, ""))
-  : null;
+const KEY = config.get('key');
 
 app.get("/@logout", (req, res) => {
   if (KEY) {
@@ -138,7 +142,7 @@ app.use((req, res, next) => {
 });
 
 function relative(...paths) {
-  const finalPath = paths.reduce((a, b) => path.join(a, b), process.cwd());
+  const finalPath = paths.reduce((a, b) => path.join(a, b), config.get('baseDir'));
   if (path.relative(process.cwd(), finalPath).startsWith("..")) {
     throw new Error("Failed to resolve path outside of the working directory");
   }
@@ -387,7 +391,7 @@ app.get("/*@download", (req, res) => {
   let files = null;
   try {
     files = JSON.parse(req.query.files);
-  } catch (e) {}
+  } catch (e) { }
   if (!files || !files.map) {
     req.flash("error", "No files selected.");
     res.redirect("back");
@@ -586,8 +590,9 @@ if (shellable || cmdable) {
   });
 }
 
-const SMALL_IMAGE_MAX_SIZE = 750 * 1024; // 750 KB
-const EXT_IMAGES = [".jpg", ".jpeg", ".png", ".webp", ".svg", ".gif", ".tiff"];
+const SMALL_IMAGE_MAX_SIZE = config.get('smallImageMaxSize')
+const EXT_IMAGES = config.get('extImages');
+
 function isimage(f) {
   for (const ext of EXT_IMAGES) {
     if (f.endsWith(ext)) {
