@@ -77,6 +77,8 @@ app.set("view engine", "handlebars");
 
 app.use('/manifest-store', manifestStoreRouter)
 
+app.use('/mirador', express.static(path.join(__dirname, 'mirador')))
+
 app.use("/@assets", express.static(path.join(__dirname, "assets")));
 // init assets
 assets.forEach((asset) => {
