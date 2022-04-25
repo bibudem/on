@@ -10,11 +10,11 @@ const app = Router();
 /*
 Route                         HTTP Verb Description
 -------------------------------------------------------------------------------------------
-/api/manifests                GET       Get all manifests
-/api/manifests                POST      Create a manifest - returns manifest uri
-/api/manifests/:manifestId    GET       Get manifest by id
-/api/manifests/:manifestId    PUT       Update manifest with id
-/api/manifests/:manifestId    DELETE    Delete manifest with id (currently not implemented)
+/                GET       Get all manifests
+/                POST      Create a manifest - returns manifest uri
+/:manifestId    GET       Get manifest by id
+/:manifestId    PUT       Update manifest with id
+/:manifestId    DELETE    Delete manifest with id (currently not implemented)
 -------------------------------------------------------------------------------------------
 */
 
@@ -41,7 +41,7 @@ app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 
-app.route('/api/manifests')
+app.route('/')
   // list all manifets
   .get(function (req, res) {
     // look up manifest list on the file system
@@ -50,7 +50,7 @@ app.route('/api/manifests')
     var manifestUris = [];
     manifestFiles.map((manifestFilename, index) => {
       manifestUris.push({
-        uri: req.protocol + '://' + req.headers.host + '/api/manifests/' + manifestFilename
+        uri: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestFilename
       })
     });
 
@@ -70,10 +70,10 @@ app.route('/api/manifests')
     res.status(201);
 
     // return the manifest uri
-    res.json({ uri: req.protocol + '://' + req.headers.host + '/api/manifests/' + manifestId });
+    res.json({ uri: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestId });
   });
 
-app.route('/api/manifests/:manifestId')
+app.route('/:manifestId')
   // get manifest with id
   .get(function (req, res) {
     // get the manifest from the file system
