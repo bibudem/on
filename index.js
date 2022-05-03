@@ -28,7 +28,8 @@ const console = require('./lib/console')
 
 const port = config.get('server.port');
 
-const manifestStoreRouter = require('./routes/manifest-store')
+const manifestStoreRouter = require('./routes/manifest-store.route')
+const generateurRouter = require('./routes/generateur.route')
 
 const app = express();
 const http = app.listen(port);
@@ -76,6 +77,8 @@ app.engine(
 app.set("view engine", "handlebars");
 
 app.use('/manifest-store', manifestStoreRouter)
+
+app.use('/generateur', generateurRouter)
 
 app.use('/mirador', express.static(path.join(__dirname, 'mirador')))
 app.use('/universalviewer', express.static(path.join(__dirname, 'universalviewer')))
