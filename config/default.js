@@ -15,6 +15,12 @@ module.exports = {
     '.tiff': 'image',
     '.tif': 'image',
     '.gif': 'image',
-    '.svg': 'image'
+    '.svg': 'image',
+    '.mp4': 'video',
+    '.mpg': 'video',
+    '.mpeg': 'video',
+    '.mkv': 'video',
+    '.avi': 'video',
+    '.ogg': 'video'
   }
 }
