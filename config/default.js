@@ -21,6 +21,7 @@ module.exports = {
     '.mpeg': 'video',
     '.mkv': 'video',
     '.avi': 'video',
-    '.ogg': 'video'
+    '.ogg': 'video',
+    '.mp3': 'audio'
   }
 }

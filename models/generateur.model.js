@@ -3,8 +3,10 @@ const { extname, join } = require('path')
 const sizeOf = require('image-size')
 const mime = require('mime-types')
 const { getVideoDurationInSeconds } = require('get-video-duration')
+const { getAudioDurationInSeconds } = require('get-audio-duration')
 const imageManifestTemplate = require('../config/image-manifest-template.json')
 const videoManifestTemplate = require('../config/video-manifest-template.json')
+const audioManifestTemplate = require('../config/audio-manifest-template.json')
 const config = require('config')
 
 const fileExists = async function (path) {
@@ -43,6 +45,11 @@ module.exports = async function getManifest(path) {
   if (fileType === 'video') {
     return await getVideoManifest(path)
   }
+  if (fileType === 'audio') {
+    return await getAudioManifest(path)
+  }
+
+  return null;
 }
 
 function getImageManifest(path) {
@@ -74,6 +81,21 @@ async function getVideoManifest(path) {
     manifest.items[0].items[0].items[0].body.id = videoUrl;
     // manifest.items[0].items[0].items[0].body.height = imageSize.height;
     // manifest.items[0].items[0].items[0].body.width = imageSize.width;
+    manifest.items[0].items[0].items[0].body.format = mime.lookup(path);
+    manifest.items[0].items[0].items[0].body.duration = duration;
+    return manifest;
+  } catch (e) {
+    console.error(e)
+    return null;
+  }
+}
+
+async function getAudioManifest(path) {
+  try {
+    let manifest = Object.assign({}, audioManifestTemplate);
+    const audioUrl = config.get('server.origin') + path;
+    const duration = await getAudioDurationInSeconds(config.get('baseDir') + path)
+    manifest.items[0].items[0].items[0].body.id = audioUrl;
     manifest.items[0].items[0].items[0].body.format = mime.lookup(path);
     manifest.items[0].items[0].items[0].body.duration = duration;
     return manifest;
