@@ -5,7 +5,7 @@ Un ensemble d'outils pour se familiariser avec les spécifications IIIF:
 - Une génération automatique de manifest.json pour les images, sons et vidéos
 - Des éditeurs de manifest.json
 
-La suite de ce readme est tiré de l'outil file-manager, utilisé comme base de code.
+La suite de ce readme est copiée de l'outil file-manager, utilisé comme base de code.
 
 # file-manager
 
