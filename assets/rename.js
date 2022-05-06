@@ -14,7 +14,7 @@ const updateRenameValue = ($inputs, $value) => {
 $select.on("change-files", (e, files) => {
   if (files.length == 0) {
     $(".rename-files").html(
-      `<ul class="list-group"><li class="list-group-item text-muted">No files selected</li></ul>`
+      `<ul class="list-group"><li class="list-group-item text-muted">Aucun fichier sélectionné</li></ul>`
     );
     return;
   }

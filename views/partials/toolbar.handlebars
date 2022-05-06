@@ -2,55 +2,57 @@
 	<div class="container-fluid px-2">
 		<div class="d-flex">
 			<div class="btn-group me-2" role="group">
-				<a class="btn btn-primary" href="@upload" data-bs-toggle="modal" data-bs-target="#upload" title="Upload a file" data-bs-placement="top">
+				<a class="btn btn-primary" href="@upload" data-bs-toggle="modal" data-bs-target="#upload" title="Ajouter un fichier" data-bs-placement="top">
 					{{octicon "upload"}}
-					<span class="d-none d-sm-inline align-text-bottom">Upload</span>
+					<span class="d-none d-sm-inline align-text-bottom">Ajouter un fichier</span>
 				</a>
-				<a class="btn btn-secondary" href="@mkdir" data-bs-toggle="modal" data-bs-target="#mkdir" title="Create a new folder" data-bs-placement="top">
+			</div>
+			<div class="btn-group me-2" role="group">
+				<a class="btn btn-secondary" href="@mkdir" data-bs-toggle="modal" data-bs-target="#mkdir" title="Créer un dossier" data-bs-placement="top">
 					{{octicon "file-directory"}}
-					<span class="d-none d-md-inline align-text-bottom">New folder</span>
+					<span class="d-none d-md-inline align-text-bottom">Nouveau dossier</span>
 				</a>
 			</div>
 			{{#either cmdable shellable}}
 			<div class="btn-group me-2" role="group">
 				{{#if cmdable}}
-				<a class="btn btn-info" href="@cmd" data-bs-toggle="modal" data-bs-target="#cmd" title="Run a command" data-bs-placement="top">
+				<a class="btn btn-info" href="@cmd" data-bs-toggle="modal" data-bs-target="#cmd" title="Exécuter une commande" data-bs-placement="top">
 					{{octicon "terminal"}}
-					<span class="d-none d-lg-inline align-text-bottom">Run command</span>
+					<span class="d-none d-lg-inline align-text-bottom">Exécuter une commande</span>
 				</a>
 				{{/if}}
 				{{#if shellable}}
-				<a class="btn btn-warning" href="@shell" title="Open a new shell" data-bs-placement="top">
+				<a class="btn btn-warning" href="@shell" title="Ouvrir un terminal" data-bs-placement="top">
 					{{octicon "terminal"}}
-					<span class="d-none d-md-inline align-text-bottom">Open shell</span>
+					<span class="d-none d-md-inline align-text-bottom">Ouvrir un terminal</span>
 				</a>
 				{{/if}}
 			</div>
 			{{/either}}
 			<div class="btn-group me-2" role="group">
-				<a class="btn btn-success" href="@download" data-bs-toggle="modal" data-bs-target="#download" title="Download file archive" data-bs-placement="top">
+				<a class="btn btn-success" href="@download" data-bs-toggle="modal" data-bs-target="#download" title="Télécharer une archive de fichiers" data-bs-placement="top">
 					{{octicon "file-zip"}}
-					<span class="d-none d-lg-inline align-text-bottom">Download</span>
+					<span class="d-none d-lg-inline align-text-bottom">Télécharger</span>
 				</a>
 			</div>
 			<div class="btn-group me-2" role="group">
-				<a class="btn btn-secondary" href="@rename" data-bs-toggle="modal" data-bs-target="#rename" title="Rename selected files" data-bs-placement="top">
+				<a class="btn btn-secondary" href="@rename" data-bs-toggle="modal" data-bs-target="#rename" title="Renommer les fichiers sélectionnés" data-bs-placement="top">
 					{{octicon "pencil"}}
-					<span class="d-none d-lg-inline align-text-bottom">Rename</span>
+					<span class="d-none d-lg-inline align-text-bottom">Renommer</span>
 				</a>
 			</div>
 			<div class="btn-group me-2" role="group">
-				<a class="btn btn-danger" href="@delete" data-bs-toggle="modal" data-bs-target="#delete" title="Delete selected files" data-bs-placement="top">
+				<a class="btn btn-danger" href="@delete" data-bs-toggle="modal" data-bs-target="#delete" title="Supprimer les fichiers sélectionnés" data-bs-placement="top">
 					{{octicon "trash"}}
-					<span class="d-none d-lg-inline align-text-bottom">Delete</span>
+					<span class="d-none d-lg-inline align-text-bottom">Supprimer</span>
 				</a>
 			</div>
 		</div>
 		<div class="d-flex">
 			<div class="btn-group ms-2" role="group">
-				<a class="btn btn-warning" href="./" title="Refresh list" data-bs-placement="top">
+				<a class="btn btn-warning" href="./" title="Actualiser la page" data-bs-placement="top">
 					{{octicon "sync"}}
-					<span class="d-none d-lg-inline align-text-bottom">Refresh</span>
+					<span class="d-none d-lg-inline align-text-bottom">Actualiser</span>
 				</a>
 			</div>
 		</div>

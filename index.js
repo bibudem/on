@@ -327,7 +327,7 @@ app.post("/*@delete", (req, res) => {
 
   let files = JSON.parse(req.body.files);
   if (!files || !files.map) {
-    req.flash("error", "No files selected.");
+    req.flash("error", "Aucun fichier sélectionné.");
     res.redirect("back");
     return; // res.status(400).end();
   }
@@ -399,7 +399,7 @@ app.get("/*@download", (req, res) => {
     files = JSON.parse(req.query.files);
   } catch (e) { }
   if (!files || !files.map) {
-    req.flash("error", "No files selected.");
+    req.flash("error", "Aucun fichier sélectionné.");
     res.redirect("back");
     return; // res.status(400).end();
   }
@@ -456,7 +456,7 @@ app.post("/*@rename", (req, res) => {
 
   let files = JSON.parse(req.body.files);
   if (!files || !files.map) {
-    req.flash("error", "No files selected.");
+    req.flash("error", "Aucun fichier sélectionné.");
     res.redirect("back");
     return;
   }
@@ -502,8 +502,12 @@ app.post("/*@rename", (req, res) => {
     });
 });
 
-const shellable = process.env.SHELL != "false" && process.env.SHELL;
-const cmdable = process.env.CMD != "false" && process.env.CMD;
+// On retire la possibilité d'ouvrir un terminal et de lancer une commande
+// TODO: rendre cela paramétrable
+const shellable = false;
+//const shellable = process.env.SHELL != "false" && process.env.SHELL;
+const cmdable = false;
+//const cmdable = process.env.CMD != "false" && process.env.CMD;
 if (shellable || cmdable) {
   const shellArgs = process.env.SHELL.split(" ");
   const exec = process.env.SHELL == "login" ? "/usr/bin/env" : shellArgs[0];
