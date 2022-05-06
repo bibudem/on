@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark bg-primary fixed-top navbar-expand-sm">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="/">File Manager</a>
+		<a class="navbar-brand" href="/">Objets numériques &mdash; Explorateur</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -13,11 +13,11 @@
 			<div class="navbar-nav">
 				{{#if isloginenabled}}
 				{{#if isloggingin}}
-					<a class="nav-item nav-link" href="/@login" title="Sign in" data-bs-placement="left">
+					<a class="nav-item nav-link" href="/@login" title="S'identifier" data-bs-placement="left">
 						{{octicon "sign-in"}}
 					</a>
 				{{else}}
-					<a class="nav-item nav-link" href="/@logout" title="Sign out" data-bs-placement="left">
+					<a class="nav-item nav-link" href="/@logout" title="Se déconnecter" data-bs-placement="left">
 						{{octicon "sign-out"}}
 					</a>
 				{{/if}}

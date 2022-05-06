@@ -3,3 +3,4 @@ public/
 data/
 config/local.js
 **/.DS_Store
+.vscode/launch.json

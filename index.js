@@ -327,7 +327,7 @@ app.post("/*@delete", (req, res) => {
 
   let files = JSON.parse(req.body.files);
   if (!files || !files.map) {
-    req.flash("error", "No files selected.");
+    req.flash("error", "Aucun fichier sélectionné.");
     res.redirect("back");
     return; // res.status(400).end();
   }
@@ -399,7 +399,7 @@ app.get("/*@download", (req, res) => {
     files = JSON.parse(req.query.files);
   } catch (e) { }
   if (!files || !files.map) {
-    req.flash("error", "No files selected.");
+    req.flash("error", "Aucun fichier sélectionné.");
     res.redirect("back");
     return; // res.status(400).end();
   }
@@ -456,7 +456,7 @@ app.post("/*@rename", (req, res) => {
 
   let files = JSON.parse(req.body.files);
   if (!files || !files.map) {
-    req.flash("error", "No files selected.");
+    req.flash("error", "Aucun fichier sélectionné.");
     res.redirect("back");
     return;
   }

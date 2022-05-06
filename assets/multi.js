@@ -6,7 +6,7 @@ $select.on("change-files", (e, files) => {
   $(".multi-files-value").val(JSON.stringify(files.map((f) => f.name)));
   if (files.length == 0) {
     $(".multi-files").html(
-      `<li class="list-group-item text-muted">No files selected</li>`
+      `<li class="list-group-item text-muted">Aucun fichier sélectionné</li>`
     );
     return;
   }
