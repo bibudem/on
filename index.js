@@ -502,8 +502,12 @@ app.post("/*@rename", (req, res) => {
     });
 });
 
-const shellable = process.env.SHELL != "false" && process.env.SHELL;
-const cmdable = process.env.CMD != "false" && process.env.CMD;
+// On retire la possibilité d'ouvrir un terminal et de lancer une commande
+// TODO: rendre cela paramétrable
+const shellable = false;
+//const shellable = process.env.SHELL != "false" && process.env.SHELL;
+const cmdable = false;
+//const cmdable = process.env.CMD != "false" && process.env.CMD;
 if (shellable || cmdable) {
   const shellArgs = process.env.SHELL.split(" ");
   const exec = process.env.SHELL == "login" ? "/usr/bin/env" : shellArgs[0];
