@@ -658,7 +658,7 @@ app.get("/*", (req, res) => {
                   name: f,
                   isdirectory: stats.isDirectory(),
                   issmallimage: isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
-                  size: stats.size,
+                  size: (stats.size/1024/1024).toLocaleString("fr-FR"),
                 });
               });
             })
