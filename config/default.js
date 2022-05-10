@@ -5,7 +5,7 @@ module.exports = {
     origin: 'http://localhost:8080'
   },
   key: null,
-  baseDir: 'd:\\projets\\on\\public\\cs',
+  baseDir: 'd:\\projets\\on\\public\\data\\cs',
   smallImageMaxSize: 2 * 1024 * 1024, // 2Mb
   extImages: [".jpg", ".jpeg", ".png", ".webp", ".svg", ".gif", ".tiff"], // file browser
   fileTypes: {

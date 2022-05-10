@@ -600,6 +600,10 @@ if (shellable || cmdable) {
   });
 }
 
+app.get('/a-propos', function (req, res) {
+  res.render('a-propos')
+})
+
 const SMALL_IMAGE_MAX_SIZE = config.get('smallImageMaxSize')
 const EXT_IMAGES = config.get('extImages');
 
