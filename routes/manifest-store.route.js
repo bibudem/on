@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const fs = require('fs');
 const { join } = require('path')
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const bodyParser = require('body-parser');
 
 // Create app
@@ -61,10 +61,10 @@ app.route('/')
   // create a manifest
   .post(function (req, res) {
     // create a unique id for the manifest
-    var manifestId = uuid();
+    var manifestId = uuidv4();
 
     // store the manifest on the file system
-    fs.writeFileSync(join(__dirname, '..', 'data', 'manifests' + manifestId), JSON.stringify(req.body));
+    fs.writeFileSync(join(__dirname, '..', 'data', 'manifests', manifestId), JSON.stringify(req.body));
 
     // set the status code in the response
     res.status(201);
@@ -77,7 +77,7 @@ app.route('/:manifestId')
   // get manifest with id
   .get(function (req, res) {
     // get the manifest from the file system
-    var manifestData = fs.readFileSync(join(__dirname, '..', 'data', 'manifests' + req.params.manifestId), 'utf8');
+    var manifestData = fs.readFileSync(join(__dirname, '..', 'data', 'manifests', req.params.manifestId), 'utf8');
 
     // return the manifest data
     res.json(JSON.parse(manifestData));
