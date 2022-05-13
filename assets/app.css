@@ -1,0 +1,14 @@
+.options {
+  position: relative;
+}
+
+.options-icon {
+  cursor: pointer;
+}
+
+.options-container {
+  position: absolute;
+  background-color: white;
+  list-style: none;
+  padding: 1em;
+}

@@ -17,12 +17,12 @@
 				<ul class="list-group">
 				{{#each files}}
 					<li class="list-group-item">
-						<label for="check{{@index}}" class="stretched-invisible-label">
+						{{!-- <label for="check{{@index}}" class="stretched-invisible-label"> --}}
 							<div class="form-check">
 								<input type="checkbox" class="form-check-input multi-select" data-select="{{name}}" data-select-size="{{size}}" data-select-type="{{#if isdirectory}}directory{{else}}file{{/if}}" id="check{{@index}}">
-								<span class="form-check-label d-flex align-items-start justify-content-between">
+								<span class="file-or-dir form-check-label d-flex align-items-start justify-content-between">
 									{{#if isdirectory}}
-										<a href="./{{name}}/" class="name">{{name}}/</a>
+										<a href="./{{name}}/" class="name isDirectory">{{name}}/</a>
 									{{else}}
 									{{#if error}}
 										<a href="./{{name}}/" class="name" title="{{error}}">{{name}}/</a>
@@ -37,7 +37,7 @@
 								<img src="./{{name}}" class="mt-2" style="max-height: 6em; max-width: 100%;">
 								{{/if}}
 							</div>
-						</label>
+						{{!-- </label> --}}
 					</li>
 				{{else}}
 					<li class="list-group-item">
