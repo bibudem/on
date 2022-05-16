@@ -12,3 +12,7 @@
   list-style: none;
   padding: 1em;
 }
+
+.options-container > li {
+  white-space: nowrap;
+}

@@ -26,11 +26,31 @@ function isMedia(el) {
   return typeof fileTypes[ext] !== 'undefined'
 }
 
+function getURLFromMediaPath(path) {
+  var url = new URL(location.href)
+  url.search = ''
+  url.hash = ''
+  url.pathname = path;
+  return url.href;
+}
+
 function openOptions(el) {
   if ($('.options-container').length === 1) {
     return
   }
-  $(el).append('<ul class="options-container shadow"><li>allo</li><li>toto</li><li></li><li></li><li></li><li></li></ul>')
+
+  $(el).append('<ul class="options-container shadow"></ul>')
+
+  var $optionsContainer = $(el).find('.options-container')
+  var mediaPath = $(el).parent().find('> *:first').text();
+  var mediaContext = $('.navbar .active').attr('href');
+  if (mediaContext !== '/') {
+    mediaContext += '/'
+  }
+  var generateurParam = encodeURIComponent(getURLFromMediaPath('/generateur' + mediaContext + mediaPath))
+
+  $optionsContainer.append('<li><a href="/mirador/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Mirador</a></li>')
+
   $(document).on('mouseup', documentOnMouseup);
 }
 
@@ -51,19 +71,17 @@ function documentOnMouseup(e) {
 $(function () {
   $('.file-or-dir').each(function (i, fileOrDir) {
     if (!isDir(fileOrDir)) {
-      $(this).append(dots)
+      if (isMedia(fileOrDir)) {
+        $(this).append(dots)
+      }
     }
   })
 
   $('.options').on('click', function (e) {
-    openOptions(this)
-  })
-
-  $(document).on('click', function (ev) {
-    if (!$(ev.target).closest('.options-container').length) {
-      console.log('click')
-      // $('.options-container').remove();
+    if ($('.options-container').length === 0) {
+      openOptions(this)
     }
   })
+
 
 })
