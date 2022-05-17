@@ -78,9 +78,10 @@ $(function () {
   })
 
   $('.options').on('click', function (e) {
-    if ($('.options-container').length === 0) {
-      openOptions(this)
+    if ($('.options-container').length > 0) {
+      closeOptions($('.options-container'))
     }
+    openOptions(this)
   })
 
 
