@@ -20,7 +20,7 @@
     <div class="uv" id="uv"></div>
 
     <script>
-      var urlAdaptor = new UV.URLAdaptor();
+      var urlAdaptor = new UV.IIIFURLAdapter();
       var manifest = (new URL(location.href).searchParams.get('manifest')) || "https://wellcomelibrary.org/iiif/b18035723/manifest";
 
       const data = urlAdaptor.getInitialData({
