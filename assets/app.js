@@ -52,6 +52,8 @@ function openOptions(el) {
   $optionsContainer.append('<li><a href="/mirador/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Mirador</a></li>');
   $optionsContainer.append('<li><a href="/universalviewer/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Universal Viewer</a></li>');
   $optionsContainer.append('<li><a href="/generateur/' + mediaContext + mediaPath + '" target="_blank">Afficher le manifest</a></li>');
+  $optionsContainer.append('<li><a href="http://localhost:8182/iiif/3' + mediaContext + mediaPath + '/full/max/0/default.jpg" target="_blank">Image via serveur IIIF</a></li>');
+  $optionsContainer.append('<li><a href="http://localhost:8182/iiif/3' + mediaContext + mediaPath + '/info.json" target="_blank">info.json</a></li>');
 
   $(document).on('mouseup', documentOnMouseup);
 }
