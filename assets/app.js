@@ -49,7 +49,9 @@ function openOptions(el) {
   }
   var generateurParam = encodeURIComponent(getURLFromMediaPath('/generateur' + mediaContext + mediaPath))
 
-  $optionsContainer.append('<li><a href="/mirador/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Mirador</a></li>')
+  $optionsContainer.append('<li><a href="/mirador/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Mirador</a></li>');
+  $optionsContainer.append('<li><a href="/universalviewer/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Universal Viewer</a></li>');
+  $optionsContainer.append('<li><a href="/generateur/' + mediaContext + mediaPath + '" target="_blank">Afficher le manifest</a></li>');
 
   $(document).on('mouseup', documentOnMouseup);
 }
