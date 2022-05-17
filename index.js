@@ -20,6 +20,7 @@ const fs = require("fs");
 const rimraf = require("rimraf");
 const path = require("path");
 
+
 const filesize = require("filesize");
 const octicons = require("@primer/octicons");
 const handlebars = require("handlebars");
@@ -614,8 +615,8 @@ function getActions(p) {
   // L'array qu'on va retourner
   const ret = [];
 
-  // Les actions pour les images
-  if (isimage(p)) {
+  // Les actions pour les objets que l'on peut consulter dans un viewer IIIF
+  if (iiifViewable(p)) {
     // Ouvrir dans Mirador
     ret.push({label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p});
     // Ouvrir dans UniversalViewer
@@ -630,8 +631,31 @@ function getActions(p) {
     ret.push({label: 'Afficher le info.json', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json'});
   }
 
+
   // On retourne la liste d'actions
   return ret;
+}
+
+// Retourne true si un viewer IIIF peut afficher le contenu
+// f est le nom du fichier
+function iiifViewable(f) {
+  return isimage(f) || isvideo(f) || isaudio(f);
+}
+
+// Retourne true si c'est une vidéo
+function isvideo(f) {
+  const ext = path.extname(f);
+  if (ext == undefined || ext == "") return false;
+  if (config.get("fileTypes")[ext] && config.get("fileTypes")[ext] == 'video') return true;
+  return false;
+}
+
+// Retourne true si c'est une vidéo
+function isaudio(f) {
+  const ext = path.extname(f);
+  if (ext == undefined || ext == "") return false;
+  if (config.get("fileTypes")[ext] && config.get("fileTypes")[ext] == 'audio') return true;
+  return false;
 }
 
 function isimage(f) {
