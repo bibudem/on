@@ -39,23 +39,27 @@ function openOptions(el) {
     return
   }
 
-  $(el).append('<ul class="options-container shadow"></ul>')
+//  $(el).append('<ul class="options-container shadow"></ul>')
 
-  var $optionsContainer = $(el).find('.options-container')
-  var mediaPath = $(el).parent().find('> *:first').text();
-  var mediaContext = $('.navbar .active').attr('href');
-  if (mediaContext !== '/') {
-    mediaContext += '/'
-  }
-  var generateurParam = encodeURIComponent(getURLFromMediaPath('/generateur' + mediaContext + mediaPath))
+//  var $optionsContainer = $(el).find('.options-container')
+//  var mediaPath = $(el).parent().find('> *:first').text();
+//  var mediaContext = $('.navbar .active').attr('href');
+//  if (mediaContext !== '/') {
+//    mediaContext += '/'
+//  }
+//  var generateurParam = encodeURIComponent(getURLFromMediaPath('/generateur' + mediaContext + mediaPath))
 
-  $optionsContainer.append('<li><a href="/mirador/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Mirador</a></li>')
+//  $optionsContainer.append('<li><a href="/mirador/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Mirador</a></li>');
+//  $optionsContainer.append('<li><a href="/universalviewer/?manifest=' + generateurParam + '" target="_blank">Ouvrir dans Universal Viewer</a></li>');
+//  $optionsContainer.append('<li><a href="/generateur/' + mediaContext + mediaPath + '" target="_blank">Afficher le manifest</a></li>');
+//  $optionsContainer.append('<li><a href="http://localhost:8182/iiif/3' + mediaContext + mediaPath + '/full/max/0/default.jpg" target="_blank">Image via serveur IIIF</a></li>');
+//  $optionsContainer.append('<li><a href="http://localhost:8182/iiif/3' + mediaContext + mediaPath + '/info.json" target="_blank">info.json</a></li>');
 
   $(document).on('mouseup', documentOnMouseup);
 }
 
 function closeOptions($el) {
-  $el.remove();
+//  $el.remove();
   $(document).off('mouseup')
 }
 
@@ -72,16 +76,15 @@ $(function () {
   $('.file-or-dir').each(function (i, fileOrDir) {
     if (!isDir(fileOrDir)) {
       if (isMedia(fileOrDir)) {
-        $(this).append(dots)
+//        $(this).append(dots)
       }
     }
   })
 
   $('.options').on('click', function (e) {
-    if ($('.options-container').length > 0) {
-      closeOptions($('.options-container'))
+    if ($('.options-container').length === 0) {
+      openOptions(this)
     }
-    openOptions(this)
   })
 
 

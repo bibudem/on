@@ -30,6 +30,18 @@
 									{{else}}
 										<a href="./{{name}}" class="name">{{name}}</a>
 										<span class="badge rounded-pill bg-secondary badge-alignment">{{size}} Mo</span>
+										{{#if actions}}
+											<span class="options">
+												<svg style="width:24px;height:24px" viewBox="0 0 24 24" class="options-icon">
+													<path fill="currentColor" d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"></path>
+												</svg>
+												<ul class="options-container shadow">
+													{{#each actions}}
+														<li><a href="{{href}}" target="_blank">{{label}}</a></li>
+													{{/each}}
+												</ul>
+											</span>
+										{{/if}}
 									{{/if}}
 									{{/if}}
 								</span>

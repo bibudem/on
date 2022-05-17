@@ -23,5 +23,9 @@ module.exports = {
     '.avi': 'video',
     '.ogg': 'video',
     '.mp3': 'audio'
-  }
+  },
+  iiifImageServerURL: 'http://localhost:8182/iiif/3/',
+  generateurURL: '/generateur/',
+  miradorURL: '/mirador/',
+  uvURL: '/universalviewer/'
 }

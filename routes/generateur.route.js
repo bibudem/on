@@ -5,7 +5,7 @@ const getModel = require('../models/generateur.model')
 const router = Router();
 
 router.get('/*', async function (req, res, next) {
-  const model = await getModel(decodeURIComponent(req.url))
+  const model = await getModel(req.url)
   if (model) {
     res.send(model)
   } else {
