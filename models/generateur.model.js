@@ -27,6 +27,7 @@ const getFileType = function (path) {
 }
 
 module.exports = async function getManifest(path) {
+
   const thePath = config.get('baseDir') + path;
   try {
     await fileExists(thePath)
@@ -55,7 +56,7 @@ module.exports = async function getManifest(path) {
 function getImageManifest(path) {
   try {
     let manifest = Object.assign({}, imageManifestTemplate);
-    const imageUrl = config.get('server.origin') + path;
+    const imageUrl = encodeURI(config.get('server.origin') + path);
     const imageSize = sizeOf(config.get('baseDir') + path);
     manifest.items[0].height = imageSize.height;
     manifest.items[0].width = imageSize.width;
@@ -73,7 +74,7 @@ function getImageManifest(path) {
 async function getVideoManifest(path) {
   try {
     let manifest = Object.assign({}, videoManifestTemplate);
-    const videoUrl = config.get('server.origin') + path;
+    const videoUrl = encodeURI(config.get('server.origin') + path);
     // const imageSize = sizeOf(config.get('baseDir') + path);
     const duration = await getVideoDurationInSeconds(config.get('baseDir') + path)
     // manifest.items[0].height = imageSize.height;
@@ -93,7 +94,7 @@ async function getVideoManifest(path) {
 async function getAudioManifest(path) {
   try {
     let manifest = Object.assign({}, audioManifestTemplate);
-    const audioUrl = config.get('server.origin') + path;
+    const audioUrl = encodeURI(config.get('server.origin') + path);
     const duration = await getAudioDurationInSeconds(config.get('baseDir') + path)
     manifest.items[0].items[0].items[0].body.id = audioUrl;
     manifest.items[0].items[0].items[0].body.format = mime.lookup(path);
