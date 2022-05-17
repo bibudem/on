@@ -82,6 +82,7 @@ app.use('/generateur', generateurRouter)
 
 app.use('/mirador', express.static(path.join(__dirname, 'mirador')))
 app.use('/universalviewer', express.static(path.join(__dirname, 'universalviewer')))
+app.use('/openseadragon', express.static(path.join(__dirname, 'openseadragon')))
 
 app.use("/@assets", express.static(path.join(__dirname, "assets")));
 // init assets
@@ -619,6 +620,8 @@ function getActions(p) {
     ret.push({label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p});
     // Ouvrir dans UniversalViewer
     ret.push({label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p});
+    // Ouvrir dans OpenSeaDragon
+    ret.push({label: 'Ouvrir dans OpenSeaDragon', href: config.get('osdURL') + '?info=' + config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json'});
     // Afficher le manifest
     ret.push({label: 'Afficher le manifest', href: config.get('generateurURL') + encodeURIComponent(p)});
     // Afficher l'image via le serveur d'images IIIF

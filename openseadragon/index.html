@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+
+  <head>
+    <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
+  </head>
+
+  <body>
+    <div id="seadragon-viewer" style="width:1200px; height:800px;"></div>
+    <script type="text/javascript">
+      var qS = window.location.search;
+      var info = (new URLSearchParams(qS)).get("info");
+      OpenSeadragon({
+          id:            "seadragon-viewer",
+          prefixUrl:     "https://openseadragon.github.io/openseadragon/images/",
+          sequenceMode:  true,
+          tileSources:   [
+              info
+          ]
+      });
+  </script>
+
+</body>
+
+</html>
