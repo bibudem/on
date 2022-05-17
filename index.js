@@ -607,6 +607,30 @@ app.get('/a-propos', function (req, res) {
 const SMALL_IMAGE_MAX_SIZE = config.get('smallImageMaxSize')
 const EXT_IMAGES = config.get('extImages');
 
+// Retourne une liste d'actions à afficher pour un fichier ou un dossier
+// p est le chemin relatif complet du fichier
+function getActions(p) {
+  // L'array qu'on va retourner
+  const ret = [];
+
+  // Les actions pour les images
+  if (isimage(p)) {
+    // Ouvrir dans Mirador
+    ret.push({label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p});
+    // Ouvrir dans UniversalViewer
+    ret.push({label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p});
+    // Afficher le manifest
+    ret.push({label: 'Afficher le manifest', href: config.get('generateurURL') + p});
+    // Afficher l'image via le serveur d'images IIIF
+    ret.push({label: 'Afficher l\'image avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg'});
+    // Afficher le info.json via le serveur d'images IIIF
+    ret.push({label: 'Afficher le info.json', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json'});
+  }
+
+  // On retourne la liste d'actions
+  return ret;
+}
+
 function isimage(f) {
   for (const ext of EXT_IMAGES) {
     if (f.endsWith(ext)) {
@@ -659,6 +683,7 @@ app.get("/*", (req, res) => {
                   isdirectory: stats.isDirectory(),
                   issmallimage: isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
                   size: (stats.size/1024/1024).toLocaleString("fr-FR"),
+                  actions: getActions(res.filename + f),
                 });
               });
             })
