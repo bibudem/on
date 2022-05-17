@@ -27,7 +27,6 @@ const getFileType = function (path) {
 }
 
 module.exports = async function getManifest(path) {
-  path = decodeURI(path);
   const thePath = config.get('baseDir') + path;
   try {
     await fileExists(thePath)

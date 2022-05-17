@@ -623,7 +623,7 @@ function getActions(p) {
     // Ouvrir dans OpenSeaDragon
     ret.push({label: 'Ouvrir dans OpenSeaDragon', href: config.get('osdURL') + '?info=' + config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json'});
     // Afficher le manifest
-    ret.push({label: 'Afficher le manifest', href: config.get('generateurURL') + encodeURIComponent(p)});
+    ret.push({label: 'Afficher le manifest', href: config.get('generateurURL') + p});
     // Afficher l'image via le serveur d'images IIIF
     ret.push({label: 'Afficher l\'image avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg'});
     // Afficher le info.json via le serveur d'images IIIF
