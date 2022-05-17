@@ -11,6 +11,7 @@
   background-color: white;
   list-style: none;
   padding: 1em;
+  z-index: 1;
 }
 
 .options-container > li {
