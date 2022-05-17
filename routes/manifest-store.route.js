@@ -70,7 +70,10 @@ app.route('/')
     res.status(201);
 
     // return the manifest uri
-    res.json({ uri: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestId });
+    res.json({
+      uri: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestId,
+      location: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestId,
+      updateLocation: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestId });
   });
 
 app.route('/:manifestId')
@@ -85,7 +88,8 @@ app.route('/:manifestId')
 
   // update an existing manifest with id
   .put(function (req, res) {
-    var manifestPath = join(__dirname, '..', 'data', 'manifests', req.params.manifestId);
+    var manId = req.params.manifestId;
+    var manifestPath = join(__dirname, '..', 'data', 'manifests', manId);
     var statusCode = 200;
 
     // check the file system to determine whether the resource exists
@@ -98,7 +102,11 @@ app.route('/:manifestId')
 
     // set the status code in the response
     res.status(statusCode);
-    res.json({ message: 'Manifest successfully updated' });
+    res.json({
+      uri: req.protocol + '://' + req.headers.host + '/manifest-store/' + manId,
+      location: req.protocol + '://' + req.headers.host + '/manifest-store/' + manId,
+      updateLocation: req.protocol + '://' + req.headers.host + '/manifest-store/' + manId,
+      message: 'Manifest successfully updated' });
   })
 
   // delete an existing manifest with id
