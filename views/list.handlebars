@@ -26,10 +26,10 @@
 									{{else}}
 									{{#if error}}
 										<a href="./{{name}}/" class="name" title="{{error}}">{{name}}/</a>
-										<span class="badge rounded-pill bg-danger badge-alignment">err</span>
+										{{!-- <span class="badge rounded-pill bg-danger badge-alignment">err</span> --}}
 									{{else}}
 										<a href="./{{name}}" class="name">{{name}}</a>
-										<span class="badge rounded-pill bg-secondary badge-alignment">{{size}} Mo</span>
+										{{!-- <span class="badge rounded-pill bg-secondary badge-alignment">{{size}} Mo</span> --}}
 										{{#if actions}}
 											<span class="options">
 												<svg style="width:24px;height:24px" viewBox="0 0 24 24" class="options-icon">

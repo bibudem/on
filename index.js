@@ -618,17 +618,17 @@ function getActions(p) {
   // Les actions pour les objets que l'on peut consulter dans un viewer IIIF
   if (iiifViewable(p)) {
     // Ouvrir dans Mirador
-    ret.push({label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p});
+    ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p });
     // Ouvrir dans UniversalViewer
-    ret.push({label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p});
+    ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p });
     // Ouvrir dans OpenSeaDragon
-    ret.push({label: 'Ouvrir dans OpenSeaDragon', href: config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json')});
+    ret.push({ label: 'Ouvrir dans OpenSeaDragon', href: config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json') });
     // Afficher le manifest
-    ret.push({label: 'Afficher le manifest', href: config.get('generateurURL') + p});
+    ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p });
     // Afficher l'image via le serveur d'images IIIF
-    ret.push({label: 'Afficher l\'image avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg'});
+    ret.push({ label: 'Afficher l\'image avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg' });
     // Afficher le info.json via le serveur d'images IIIF
-    ret.push({label: 'Afficher le info.json', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json'});
+    ret.push({ label: 'Afficher le info.json', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json' });
   }
 
 
@@ -709,7 +709,7 @@ app.get("/*", (req, res) => {
                   name: f,
                   isdirectory: stats.isDirectory(),
                   issmallimage: isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
-                  size: (stats.size/1024/1024).toLocaleString("fr-FR"),
+                  size: stats.size,
                   actions: getActions(res.filename + f),
                 });
               });
