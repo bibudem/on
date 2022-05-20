@@ -22,7 +22,8 @@ module.exports = {
     '.mkv': 'video',
     '.avi': 'video',
     '.ogg': 'video',
-    '.mp3': 'audio'
+    '.mp3': 'audio',
+    '.pdf': 'pdf'
   },
   iiifImageServerURL: 'http://localhost:8182/iiif/3/',
   generateurURL: '/generateur/',

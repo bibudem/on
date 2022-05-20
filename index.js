@@ -30,7 +30,7 @@ const console = require('./lib/console')
 const port = config.get('server.port');
 
 const manifestStoreRouter = require('./routes/manifest-store.route')
-const generateurRouter = require('./routes/generateur.route')
+const generateurRouter = require('./routes/generateur.route');
 
 const app = express();
 const http = app.listen(port);
@@ -639,8 +639,18 @@ function getActions(p) {
 // Retourne true si un viewer IIIF peut afficher le contenu
 // f est le nom du fichier
 function iiifViewable(f) {
-  return isimage(f) || isvideo(f) || isaudio(f);
+  return isimage(f) || isvideo(f) || isaudio(f) || isPDF(f);
 }
+
+// Retourne true si c'est un fichier PDF
+function isPDF(f) {
+  const ext = path.extname(f);
+  if (ext == undefined || ext == "") return false;
+  if (config.get("fileTypes")[ext] && config.get("fileTypes")[ext] == 'pdf') return true;
+  return false;
+}
+
+
 
 // Retourne true si c'est une vidéo
 function isvideo(f) {
@@ -650,7 +660,7 @@ function isvideo(f) {
   return false;
 }
 
-// Retourne true si c'est une vidéo
+// Retourne true si c'est un audio
 function isaudio(f) {
   const ext = path.extname(f);
   if (ext == undefined || ext == "") return false;
@@ -709,7 +719,7 @@ app.get("/*", (req, res) => {
                   name: f,
                   isdirectory: stats.isDirectory(),
                   issmallimage: isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
-                  size: stats.size,
+                  size: ((stats.size/1024/1024)).toLocaleString('fr-CA', {maximumSignificantDigits: 2}),
                   actions: getActions(res.filename + f),
                 });
               });

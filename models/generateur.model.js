@@ -7,6 +7,7 @@ const { getAudioDurationInSeconds } = require('get-audio-duration')
 const imageManifestTemplate = require('../config/image-manifest-template.json')
 const videoManifestTemplate = require('../config/video-manifest-template.json')
 const audioManifestTemplate = require('../config/audio-manifest-template.json')
+const pdfManifestTemplate = require('../config/pdf-manifest-template.json')
 const config = require('config')
 
 const fileExists = async function (path) {
@@ -49,6 +50,9 @@ module.exports = async function getManifest(path) {
   if (fileType === 'audio') {
     return await getAudioManifest(path)
   }
+  if (fileType === 'pdf') {
+    return await getPDFManifest(path)
+  }
 
   return null;
 }
@@ -58,6 +62,31 @@ function getImageManifest(path) {
     let manifest = Object.assign({}, imageManifestTemplate);
     const imageUrl = config.get('server.origin') + path;
     const imageSize = sizeOf(config.get('baseDir') + path);
+    manifest.items[0].height = imageSize.height;
+    manifest.items[0].width = imageSize.width;
+    manifest.items[0].items[0].items[0].body.id = imageUrl;
+    manifest.items[0].items[0].items[0].body.height = imageSize.height;
+    manifest.items[0].items[0].items[0].body.width = imageSize.width;
+    manifest.items[0].items[0].items[0].body.format = mime.lookup(path);
+    return manifest;
+  } catch (e) {
+    console.error(e)
+    return null;
+  }
+}
+
+/* Début d'une fonction pour un manifest de PDF (multipages).
+  Pour l'instant c'est copié sur celui d'une image (première page).
+  Le plus simple serait probablement de lire le info.json de
+  Cantaloupe, il y a un array "tiles" qui semble contenir
+  toutes les dimensions des pages. On pourrait boucler là-dessus
+  et produire plusieurs canvas / items. */
+function getPDFManifest(path) {
+  try {
+    let manifest = Object.assign({}, pdfManifestTemplate);
+    // Il faudra faire une boucle sur les pages du PDF
+    const imageUrl = config.get('server.origin') + path;
+    const imageSize = {width: 600, height: 800}; //TODO: bonne taille
     manifest.items[0].height = imageSize.height;
     manifest.items[0].width = imageSize.width;
     manifest.items[0].items[0].items[0].body.id = imageUrl;
