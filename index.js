@@ -622,7 +622,9 @@ function getActions(p) {
     // Ouvrir dans UniversalViewer
     ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p });
     // Ouvrir dans OpenSeaDragon
-    ret.push({ label: 'Ouvrir dans OpenSeaDragon', href: config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json') });
+    if (isimage(p)) {
+      ret.push({ label: 'Ouvrir dans OpenSeaDragon', href: config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json') });
+    }
     // Afficher le manifest
     ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p });
     // Afficher l'image via le serveur d'images IIIF
