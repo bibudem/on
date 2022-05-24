@@ -191,7 +191,7 @@ async function getSingleImageManifest(path) {
         body.width = imgWidth;  
       }
       body.format = mimeType;
-      if (mimeType === "application/pdf") body.format = "image/jpeg";
+      if (mimeType === "application/pdf" || fileType === "image") body.format = "image/jpeg"; // Parce qu'on demande des .jpg à Cantaloupe
       // On va ajouter une vignette pour les images
       if (fileType === "image" || mimeType === "application/pdf") {
         let thumb = annot.thumbnail[0];
