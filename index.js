@@ -152,9 +152,10 @@ app.use((req, res, next) => {
 
 function relative(...paths) {
   const finalPath = paths.reduce((a, b) => path.join(a, b), config.get('baseDir'));
-  if (path.relative(process.cwd(), finalPath).startsWith("..")) {
+/*  if (path.relative(process.cwd(), finalPath).startsWith("..")) {
     throw new Error("Failed to resolve path outside of the working directory");
   }
+*/
   return finalPath;
 }
 function flashify(req, obj) {
