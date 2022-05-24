@@ -44,7 +44,7 @@ const updateSelected = () => {
     files.push({
       name: $(ele).data("select"),
       type: $(ele).data("select-type"),
-      size: $(ele).data("select-size"),
+      size: String($(ele).data("select-size")).replace(',','') * 1024,
     });
   });
   $select.trigger("change-files", [files]);

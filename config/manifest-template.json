@@ -1,0 +1,54 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "",
+  "type": "Manifest",
+  "label": {"fr": [""] },
+  "items": [
+    {
+      "id": "",
+      "type": "Canvas",
+      "label": {"fr": ["Page 1"]},
+      "height": 0,
+      "width": 0,
+      "duration": 0,
+      "items": [
+        {
+          "id": "",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "",
+                "type": "",
+                "format": "",
+                "height": 0,
+                "width": 0,
+                "duration": 0,
+                "service": [
+                  {
+                    "id": "",
+                    "profile": "level2",
+                    "type": "ImageService3"
+                  }
+                ]
+              },
+              "target": "",
+              "thumbnail": [
+                {
+                  "id": "",
+                  "type": "Image",
+                  "format": "image/jpeg",
+                  "width": 0,
+                  "height": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

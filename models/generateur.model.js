@@ -4,11 +4,10 @@ const sizeOf = require('image-size')
 const mime = require('mime-types')
 const { getVideoDurationInSeconds } = require('get-video-duration')
 const { getAudioDurationInSeconds } = require('get-audio-duration')
-const imageManifestTemplate = require('../config/image-manifest-template.json')
-const videoManifestTemplate = require('../config/video-manifest-template.json')
-const audioManifestTemplate = require('../config/audio-manifest-template.json')
-const pdfManifestTemplate = require('../config/pdf-manifest-template.json')
-const config = require('config')
+const manifestTemplate = require('../config/manifest-template.json')
+const config = require('config');
+const tiff = require('tiff');
+const PDFParser = require("pdf2json");
 
 const fileExists = async function (path) {
   return new Promise((resolve, reject) => {
@@ -27,6 +26,27 @@ const getFileType = function (path) {
   return config.get('fileTypes')[ext];
 }
 
+// Lit un fichier PDF et retourne les tailles des images
+// On passe le path et le tableau des tailles en objet
+// pour qu'ils soient passés par référence
+// TODO: comment retourner une valeur avec resolve()? Ce serait plus propre
+const getPDFImageSizes = async function testGetImageSizes(obj) {
+  return new Promise((resolve, reject) => {
+    const pdfParser = new PDFParser();
+    pdfParser.on("pdfParser_dataReady", pdfData => {
+      for (let p=0; p < pdfData.Pages.length; p++) {
+        // Pour l'instant on bricole une taille qui donne à peu près le info.json
+        // TODO: je ne sais pas d'où vient le 1.4, c'est empirique
+        // Le 24 vient du fait que la librairie considère que c'est du 96dpi
+        // et retourne en points
+        obj.sizes.push({width: Math.round(pdfData.Pages[p].Width * 24 * 1.4), height: Math.round(pdfData.Pages[p].Height * 24 * 1.4)});
+      }
+      return resolve();
+    });
+    pdfParser.loadPDF(config.get("baseDir") + obj.path);
+  });
+}
+
 module.exports = async function getManifest(path) {
   path = decodeURI(path);
   const thePath = config.get('baseDir') + path;
@@ -37,100 +57,173 @@ module.exports = async function getManifest(path) {
     return null
   }
 
-  const fileType = getFileType(thePath)
-  if (typeof fileType === 'undefined') {
-    return null
-  }
-  if (fileType === 'image') {
-    return getImageManifest(path)
-  }
-  if (fileType === 'video') {
-    return await getVideoManifest(path)
-  }
-  if (fileType === 'audio') {
-    return await getAudioManifest(path)
-  }
-  if (fileType === 'pdf') {
-    return await getPDFManifest(path)
-  }
-
-  return null;
+  return getSingleImageManifest(path);
 }
 
-function getImageManifest(path) {
+/* Produit un manifest pour une image, une vidéo ou un fichier sonore en
+    fonction d'un gabarit en config. */
+async function getSingleImageManifest(path) {
   try {
-    let manifest = Object.assign({}, imageManifestTemplate);
-    const imageUrl = config.get('server.origin') + path;
-    const imageSize = sizeOf(config.get('baseDir') + path);
-    manifest.items[0].height = imageSize.height;
-    manifest.items[0].width = imageSize.width;
-    manifest.items[0].items[0].items[0].body.id = imageUrl;
-    manifest.items[0].items[0].items[0].body.height = imageSize.height;
-    manifest.items[0].items[0].items[0].body.width = imageSize.width;
-    manifest.items[0].items[0].items[0].body.format = mime.lookup(path);
-    return manifest;
-  } catch (e) {
-    console.error(e)
-    return null;
-  }
-}
+    // On doit d'abord déterminer le nombre d'images ou de pages dans l'objet
+    let nbPages = 1;
+    let mimeType = mime.lookup(path);
+    let fileType = getFileType(path);
 
-/* Début d'une fonction pour un manifest de PDF (multipages).
-  Pour l'instant c'est copié sur celui d'une image (première page).
-  Le plus simple serait probablement de lire le info.json de
-  Cantaloupe, il y a un array "tiles" qui semble contenir
-  toutes les dimensions des pages. On pourrait boucler là-dessus
-  et produire plusieurs canvas / items. */
-function getPDFManifest(path) {
-  try {
-    let manifest = Object.assign({}, pdfManifestTemplate);
-    // Il faudra faire une boucle sur les pages du PDF
-    const imageUrl = config.get('server.origin') + path;
-    const imageSize = {width: 600, height: 800}; //TODO: bonne taille
-    manifest.items[0].height = imageSize.height;
-    manifest.items[0].width = imageSize.width;
-    manifest.items[0].items[0].items[0].body.id = imageUrl;
-    manifest.items[0].items[0].items[0].body.height = imageSize.height;
-    manifest.items[0].items[0].items[0].body.width = imageSize.width;
-    manifest.items[0].items[0].items[0].body.format = mime.lookup(path);
-    return manifest;
-  } catch (e) {
-    console.error(e)
-    return null;
-  }
-}
+    // Les fichiers TIFF ou PDF peuvent avoir plusieurs pages
+    let imgPages = [];
+    if (mimeType === "application/pdf") {
+      let myObj = {path: path, sizes: imgPages};  // Pour pouvoir passer des valeurs par référence
+      await getPDFImageSizes(myObj);
+      imgPages = myObj.sizes;
+      nbPages = imgPages.length;
+    }
 
-async function getVideoManifest(path) {
-  try {
-    let manifest = Object.assign({}, videoManifestTemplate);
-    const videoUrl = config.get('server.origin') + path;
-    // const imageSize = sizeOf(config.get('baseDir') + path);
-    const duration = await getVideoDurationInSeconds(config.get('baseDir') + path)
-    // manifest.items[0].height = imageSize.height;
-    // manifest.items[0].width = imageSize.width;
-    manifest.items[0].items[0].items[0].body.id = videoUrl;
-    // manifest.items[0].items[0].items[0].body.height = imageSize.height;
-    // manifest.items[0].items[0].items[0].body.width = imageSize.width;
-    manifest.items[0].items[0].items[0].body.format = mime.lookup(path);
-    manifest.items[0].items[0].items[0].body.duration = duration;
-    return manifest;
-  } catch (e) {
-    console.error(e)
-    return null;
-  }
-}
+    // Le traitement des TIFF, qui peuvent avoir plusieurs pages/images
+    if (mimeType === "image/tiff") {
+      let dataBuffer = fs.readFileSync(config.get("baseDir") + path);
+      nbPages = tiff.pageCount(dataBuffer);
+      imgPages = tiff.decode(dataBuffer);
+    }
 
-async function getAudioManifest(path) {
-  try {
-    let manifest = Object.assign({}, audioManifestTemplate);
-    const audioUrl = config.get('server.origin') + path;
-    const duration = await getAudioDurationInSeconds(config.get('baseDir') + path)
-    manifest.items[0].items[0].items[0].body.id = audioUrl;
-    manifest.items[0].items[0].items[0].body.format = mime.lookup(path);
-    manifest.items[0].items[0].items[0].body.duration = duration;
+    // Ensuite déterminer la taille de l'image
+    let imgWidth = 600;
+    let imgHeight = 800;
+    if (fileType === "image" && imgPages.length === 0) {
+      const imageSize = sizeOf(config.get('baseDir') + path);
+      imgHeight = imageSize.height;
+      imgWidth = imageSize.width;
+    }
+
+
+    // On va fabriquer l'ID de l'objet
+    let objectId = config.get("server.origin") + encodeURI(path);
+
+    // On charge le gabarit dans un objet qu'on va modifier
+    let manifest = JSON.parse(JSON.stringify(manifestTemplate));
+
+    // Les informations de premier niveau
+    manifest.id = objectId;
+    manifest.label.fr[0] = "Manifest généré automatiquement pour " + path;
+
+    // On peut maintenant boucler sur les pages
+
+    for (let i = 0; i < nbPages; i++) {
+
+      // Pour les services IIIF de Cantaloupe dans le cas des multipages
+      let pageIndex = "";
+
+      // Si ce n'est pas la première page, on clone la page précédente
+      if (i > 0) {
+        const newItem = JSON.parse(JSON.stringify(manifest.items[i-1]))
+        manifest.items.push(newItem);
+      }
+
+      // Un canvas par page
+      let canvasId = objectId + "/canvas/" + (i+1);
+
+      // Maintenant on va préciser le canvas
+      let c = manifest.items[i];
+      c.id = canvasId;
+
+      // Dans le cas des fichiers vidéo ou audio, on retire le hauteur et
+      // la largeur pour ajouter la durée
+      if (fileType === "audio" || fileType === "video") {
+        delete c.height;
+        delete c.width;
+        if (fileType === "audio") {
+          c.duration = await getAudioDurationInSeconds(config.get('baseDir') + path);
+        }
+        else {
+          c.duration = await getVideoDurationInSeconds(config.get('baseDir') + path);
+        }
+      }
+      else {
+        delete c.duration;
+
+        // Si on a les tailles pour chaque image...
+        if (imgPages.length > 0) {
+          imgHeight = imgPages[i].height;
+          imgWidth = imgPages[i].width;
+        }
+
+        c.height = imgHeight;
+        c.width = imgWidth;
+      }
+
+      c.label.fr[0] = "Page " + (i+1);
+
+
+      // Dans le canvas, on précise la AnnotationPage
+      let ap = c.items[0];
+      ap.id = objectId + "/page/p" + (i+1);
+
+      // Ensuite la ressource comme telle
+
+      // Son service IIIF
+      if (mimeType === "application/pdf" || mimeType === "image/tiff") {
+        pageIndex = ";" + (i+1);
+      }
+      let annot = ap.items[0];
+      annot.id = objectId + "/annotation/image" + (i+1);
+      annot.target = canvasId;
+
+      let body = annot.body;
+      if (fileType === "audio" || fileType === "video") {
+        delete body.height;
+        delete body.width;
+        delete body.service;
+        delete annot.thumbnail;
+        body.id = config.get('server.origin') + path;
+        if (fileType === "audio") {
+          body.duration = await getAudioDurationInSeconds(config.get('baseDir') + path);
+          body.type = "Sound";
+        }
+        else {
+          body.duration = await getVideoDurationInSeconds(config.get('baseDir') + path);
+          body.type = "Video";
+        }
+      }
+      else {
+        delete body.duration;
+        body.type = "Image";
+        body.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replace("/", "%2f") + pageIndex + "/full/max/0/default.jpg";
+        body.height = imgHeight;
+        body.width = imgWidth;  
+      }
+      body.format = mimeType;
+      if (mimeType === "application/pdf") body.format = "image/jpeg";
+      // On va ajouter une vignette pour les images
+      if (fileType === "image" || mimeType === "application/pdf") {
+        let thumb = annot.thumbnail[0];
+        // On va calculer la taille idéale
+        let thumbMax = 150;
+        let thumbSizeURL = "";
+        let thumbWidth = thumbMax;
+        let thumbHeight = thumbMax;
+        if (imgHeight > imgWidth) { 
+          thumbWidth = Math.round(imgWidth * (thumbMax/imgHeight));
+          thumbSizeURL = "," + thumbMax; 
+        }
+        else {
+          thumbHeight = Math.round(imgHeight * (thumbMax/imgWidth))
+          thumbSizeURL = "" + thumbMax + ","; 
+        };
+        thumb.height = thumbHeight;
+        thumb.width = thumbWidth;
+        thumb.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replace("/", "%2f") + pageIndex + "/full/" + thumbSizeURL + "/0/default.jpg";
+  
+  
+        // Maintenant on indique que c'est un service IIIF
+        let serv = body.service[0];
+        serv.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replace("/", "%2f") + pageIndex;
+      }
+    }
+
+    // On a terminé on retourne notre objet
     return manifest;
+
   } catch (e) {
-    console.error(e)
-    return null;
+      console.error(e)
+     return null;
   }
 }
