@@ -258,7 +258,7 @@ app.post("/*@upload", (req, res) => {
     fileExists
       .then((stats) => {
         console.warn("file exists, cannot overwrite");
-        req.flash("error", "File exists, cannot overwrite. ");
+        req.flash("error", "Le fichier existe, on ne peut le remplacer.");
         res.redirect("back");
       })
       .catch((err) => {
@@ -270,10 +270,10 @@ app.post("/*@upload", (req, res) => {
             return;
           }
           if (buff.length === 0) {
-            req.flash("success", "File saved. Warning: empty file.");
+            req.flash("success", "Fichier enregistré. Attention: le fichier est vide.");
           } else {
             buff = null;
-            req.flash("success", "File saved. ");
+            req.flash("success", "Fichier enregistré.");
           }
           res.redirect("back");
         });
@@ -320,7 +320,7 @@ app.post("/*@mkdir", (req, res) => {
           res.redirect("back");
           return;
         }
-        req.flash("success", "Folder created. ");
+        req.flash("success", "Dossier créé. ");
         res.redirect("back");
       });
     });
@@ -379,12 +379,12 @@ app.post("/*@delete", (req, res) => {
       });
       Promise.all(promises)
         .then(() => {
-          req.flash("success", "Files deleted. ");
+          req.flash("success", "Fichier(s) supprimé(s).");
           res.redirect("back");
         })
         .catch((err) => {
           console.warn(err);
-          req.flash("error", "Unable to delete some files: " + err);
+          req.flash("error", "Impossible de supprimer un ou des fichiers: " + err);
           res.redirect("back");
         });
     })
@@ -490,12 +490,12 @@ app.post("/*@rename", (req, res) => {
       });
       Promise.all(promises)
         .then(() => {
-          req.flash("success", "Files renamed. ");
+          req.flash("success", "Fichier(s) renommé(s).");
           res.redirect("back");
         })
         .catch((err) => {
           console.warn(err);
-          req.flash("error", "Unable to rename some files: " + err);
+          req.flash("error", "Impossible de renommer un ou des fichiers: " + err);
           res.redirect("back");
         });
     })
