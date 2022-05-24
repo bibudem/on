@@ -10,13 +10,19 @@
     <script type="text/javascript">
       var qS = window.location.search;
       var info = (new URLSearchParams(qS)).get("info");
+      var nb = (new URLSearchParams(qS)).get("nb");
+      var sources = [];
+      if (nb === 1) { sources = [info]; }
+      else {
+        for (let i = 1; i <= nb; i++) {
+          sources.push(info.replace("/info.json", ";" + i + "/info.json"));
+        }
+      }
       OpenSeadragon({
           id:            "seadragon-viewer",
           prefixUrl:     "https://openseadragon.github.io/openseadragon/images/",
           sequenceMode:  true,
-          tileSources:   [
-              info
-          ]
+          tileSources:   sources
       });
   </script>
 

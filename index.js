@@ -20,7 +20,8 @@ const fs = require("fs");
 const rimraf = require("rimraf");
 const path = require("path");
 
-
+const mime = require('mime-types');
+const tiff = require('tiff');
 const filesize = require("filesize");
 const octicons = require("@primer/octicons");
 const handlebars = require("handlebars");
@@ -623,7 +624,14 @@ function getActions(p) {
     ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p });
     // Ouvrir dans OpenSeaDragon
     if (isimage(p)) {
-      ret.push({ label: 'Ouvrir dans OpenSeaDragon', href: config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json') });
+      let nbPages = 1;
+      let mimeType = mime.lookup(p);
+      if (mimeType === "image/tiff") {
+        let dataBuffer = fs.readFileSync(config.get("baseDir") + "/" + p);
+        nbPages = tiff.pageCount(dataBuffer);
+      }
+      let infoURL = config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json&nb=' + nbPages);
+      ret.push({ label: 'Ouvrir dans OpenSeaDragon', href: infoURL });
     }
     // Afficher le manifest
     ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p });
