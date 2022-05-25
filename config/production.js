@@ -5,5 +5,5 @@ module.exports = {
   },
   baseDir: '/DATA/oncs/data',
   iiifImageServerURL: 'https://oncs.bib.umontreal.ca/iiif/3/',
-  storeBaseDir: '/DATA/oncs/manifests'
+  storeBaseDir: '/DATA/oncs/data/manifests'
 }
