@@ -179,6 +179,7 @@ function flashify(req, obj) {
 
 app.use((req, res, next) => {
   if (req.method === "GET") {
+    res.header('Access-Control-Allow-Origin', '*');
     return next();
   }
   let sourceHost = null;
