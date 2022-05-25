@@ -45,30 +45,35 @@ function openOptions($el) {
 }
 
 function closeOptions($el) {
+  console.log('closeOptions')
+  console.log($el)
   $el.hide();
   $(document).off('mouseup')
 }
 
 // Toggle show/hide typeahead on click outside
 function documentOnMouseup(e) {
-  var $container = $('.options-container:visible');
+  var $container = $('.options-container:visible').parent();
   // if the target of the click isn't the container nor a descendant of the container
   if (!$container.is(e.target) && $container.has(e.target).length === 0) {
-    closeOptions($container)
+    closeOptions($container.find('.options-container'))
   }
 }
 
 $(function () {
-  $('.file-or-dir').each(function (i, fileOrDir) {
-    if (!isDir(fileOrDir)) {
-      if (isMedia(fileOrDir)) {
-        //        $(this).append(dots)
-      }
+
+  $('.options').on('click', function (e) {
+    var $optionsContainer = $(this).find('.options-container');
+    if ($optionsContainer.is(':visible')) {
+      closeOptions($optionsContainer)
+    } else {
+      openOptions($optionsContainer)
     }
   })
 
-  $('.options').on('click', function (e) {
-    openOptions($(this).find('.options-container'))
+  $('.options-container a').on('click', function (e) {
+    e.stopPropagation()
+    closeOptions($(this).closest('.options-container'))
   })
 
 
