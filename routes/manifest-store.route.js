@@ -3,6 +3,8 @@ const fs = require('fs');
 const { join } = require('path')
 const { v4: uuidv4 } = require('uuid');
 const bodyParser = require('body-parser');
+const config = require('config')
+
 
 // Create app
 const app = Router();
@@ -45,7 +47,7 @@ app.route('/')
   // list all manifets
   .get(function (req, res) {
     // look up manifest list on the file system
-    var manifestFiles = fs.readdirSync(join(__dirname, '..', 'data', 'manifests'));
+    var manifestFiles = fs.readdirSync(config.get("storeBaseDir"));
 
     var manifestUris = [];
     manifestFiles.map((manifestFilename, index) => {
@@ -64,7 +66,7 @@ app.route('/')
     var manifestId = uuidv4();
 
     // store the manifest on the file system
-    fs.writeFileSync(join(__dirname, '..', 'data', 'manifests', manifestId), JSON.stringify(req.body));
+    fs.writeFileSync(join(config.get("storeBaseDir"), manifestId), JSON.stringify(req.body));
 
     // set the status code in the response
     res.status(201);
@@ -80,7 +82,7 @@ app.route('/:manifestId')
   // get manifest with id
   .get(function (req, res) {
     // get the manifest from the file system
-    var manifestData = fs.readFileSync(join(__dirname, '..', 'data', 'manifests', req.params.manifestId), 'utf8');
+    var manifestData = fs.readFileSync(join(config.get("storeBaseDir"), req.params.manifestId), 'utf8');
 
     // return the manifest data
     res.json(JSON.parse(manifestData));
@@ -89,7 +91,7 @@ app.route('/:manifestId')
   // update an existing manifest with id
   .put(function (req, res) {
     var manId = req.params.manifestId;
-    var manifestPath = join(__dirname, '..', 'data', 'manifests', manId);
+    var manifestPath = join(config.get("storeBaseDir"), manId);
     var statusCode = 200;
 
     // check the file system to determine whether the resource exists

@@ -30,5 +30,6 @@ module.exports = {
   generateurURL: '/generateur/',
   miradorURL: '/mirador/',
   uvURL: '/universalviewer/',
-  osdURL: '/openseadragon/'
+  osdURL: '/openseadragon/',
+  storeBaseDir: 'd:\\projets\\on\\public\\data\\cs\\manifests'
 }
