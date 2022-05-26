@@ -19,7 +19,7 @@
 					<li class="list-group-item">
 						{{!-- <label for="check{{@index}}" class="stretched-invisible-label"> --}}
 							<div class="form-check">
-								<input type="checkbox" class="form-check-input multi-select" data-select="{{name}}" data-select-size="{{size}}" data-select-type="{{#if isdirectory}}directory{{else}}file{{/if}}" id="check{{@index}}">
+								<input type="checkbox" class="form-check-input multi-select" data-select="{{href}}" data-select-size="{{size}}" data-select-type="{{#if isdirectory}}directory{{else}}file{{/if}}" id="check{{@index}}">
 								<span class="file-or-dir form-check-label d-flex align-items-start justify-content-between">
 									{{#if isdirectory}}
 										<a href="./{{name}}/" class="name isDirectory">{{name}}/</a>
