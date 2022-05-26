@@ -85,7 +85,6 @@ async function getDirectoryManifest(path) {
     let files = fs.readdirSync(config.get("baseDir") + path);
     for (let i=0; i<files.length; i++) {
       if (utils.iiifViewable(path + "/" + files[i])) {
-        console.log("Oui: " + files[i]);
         let currentItem = JSON.parse(JSON.stringify(baseItem));
         currentItem.id = config.get("server.origin") + config.get('generateurURL') + encodeURI(path.substring(1) + "/" + files[i]);
         currentItem.label.fr[0] = "Manifest généré automatiquement pour " + path + "/" + files[i];

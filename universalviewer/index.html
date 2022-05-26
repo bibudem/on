@@ -10,8 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/universalviewer@next/dist/umd/UV.js"></script>
     <style>
       #uv {
-        width: 924px;
-        height: 668px;
+        width: 100vw;
+        height: 100vh;
       }
     </style>
   </head>
@@ -30,6 +30,16 @@
 
       uv = UV.init("uv", data);
       urlAdaptor.bindTo(uv);
+
+       uv.on("configure", function ({ config, cb }) {
+        cb(
+            new Promise(function (resolve) {
+              fetch("uv-config.json").then(function (response) {
+                resolve(response.json());
+              });
+            })
+          );
+      });
     </script>
   </body>
 
