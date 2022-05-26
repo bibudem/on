@@ -32,5 +32,6 @@ module.exports = {
   miradorURL: '/mirador/',
   uvURL: '/universalviewer/',
   osdURL: '/openseadragon/',
-  storeBaseDir: 'd:\\projets\\on\\public\\data\\cs\\manifests'
+  storeBaseDir: 'd:\\projets\\on\\public\\data\\cs\\manifests',
+  storeURL: 'https://oncs.bib.umontreal.ca/manifest-store'
 }

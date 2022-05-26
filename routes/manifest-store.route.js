@@ -52,7 +52,7 @@ app.route('/')
     var manifestUris = [];
     manifestFiles.map((manifestFilename, index) => {
       manifestUris.push({
-        uri: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestFilename
+        uri: config.get("storeURL") + "/" + manifestFilename
       })
     });
 
@@ -73,9 +73,9 @@ app.route('/')
 
     // return the manifest uri
     res.json({
-      uri: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestId,
-      location: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestId,
-      updateLocation: req.protocol + '://' + req.headers.host + '/manifest-store/' + manifestId });
+      uri: config.get("storeURL") + "/" + manifestId,
+      location: config.get("storeURL") + "/" + manifestId,
+      updateLocation: config.get("storeURL") + "/" + manifestId });
   });
 
 app.route('/:manifestId')
@@ -105,9 +105,9 @@ app.route('/:manifestId')
     // set the status code in the response
     res.status(statusCode);
     res.json({
-      uri: req.protocol + '://' + req.headers.host + '/manifest-store/' + manId,
-      location: req.protocol + '://' + req.headers.host + '/manifest-store/' + manId,
-      updateLocation: req.protocol + '://' + req.headers.host + '/manifest-store/' + manId,
+      uri: config.get("storeURL") + "/" + manId,
+      location: config.get("storeURL") + "/" + manId,
+      updateLocation: config.get("storeURL") + "/" + manId,
       message: 'Manifest successfully updated' });
   })
 
