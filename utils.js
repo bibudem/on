@@ -37,11 +37,9 @@ module.exports.isaudio = function(f) {
 
 // Retourne true si c'est une image
 module.exports.isimage = function(f) {
-    for (const ext of config.get('extImages')) {
-        if (f.endsWith(ext)) {
-            return true;
-        }
-    }
+    const ext = path.extname(f);
+    if (ext == undefined || ext == "") return false;
+    if (config.get("fileTypes")[ext] && config.get("fileTypes")[ext] == 'image') return true;
     return false;
 }
 

@@ -7,7 +7,6 @@ module.exports = {
   key: null,
   baseDir: 'd:\\projets\\on\\public\\data\\cs',
   smallImageMaxSize: 2 * 1024 * 1024, // 2Mb
-  extImages: [".jpg", ".jpeg", ".jp2", ".png", ".webp", ".svg", ".gif", ".tiff", ".tif"], // file browser
   fileTypes: {
     '.jpg': 'image',
     '.jpeg': 'image',

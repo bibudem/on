@@ -613,7 +613,6 @@ app.get('/a-propos', function (req, res) {
 })
 
 const SMALL_IMAGE_MAX_SIZE = config.get('smallImageMaxSize')
-const EXT_IMAGES = config.get('extImages');
 
 // Retourne le nom du fichier à afficher dans l'explorateur
 // Si c'est dans le dossier des manifest, on parse le JSON,
