@@ -12,7 +12,8 @@ const flash = require("connect-flash");
 const querystring = require("querystring");
 const assets = require("./assets");
 const archiver = require("archiver");
-const config = require('config')
+const config = require('config');
+const utils = require("./utils.js");
 
 const notp = require("notp");
 
@@ -35,6 +36,8 @@ const generateurRouter = require('./routes/generateur.route');
 
 const app = express();
 const http = app.listen(port);
+
+
 
 app.set("views", path.join(__dirname, "views"));
 app.engine(
@@ -612,6 +615,16 @@ app.get('/a-propos', function (req, res) {
 const SMALL_IMAGE_MAX_SIZE = config.get('smallImageMaxSize')
 const EXT_IMAGES = config.get('extImages');
 
+// Retourne le nom du fichier à afficher dans l'explorateur
+// Si c'est dans le dossier des manifest, on parse le JSON,
+// Sinon on retourne le nom de fichier standard
+function getFilename(st, f) {
+  if (st.isDirectory()) {
+    return f;
+  }
+  else return f;
+}
+
 // Retourne une liste d'actions à afficher pour un fichier ou un dossier
 // p est le chemin relatif complet du fichier
 function getActions(p) {
@@ -619,13 +632,13 @@ function getActions(p) {
   const ret = [];
 
   // Les actions pour les objets que l'on peut consulter dans un viewer IIIF
-  if (iiifViewable(p)) {
+  if (utils.iiifViewable(p)) {
     // Ouvrir dans Mirador
     ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p });
     // Ouvrir dans UniversalViewer
     ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p });
     // Ouvrir dans OpenSeaDragon
-    if (isimage(p)) {
+    if (utils.isimage(p)) {
       let nbPages = 1;
       let mimeType = mime.lookup(p);
       if (mimeType === "image/tiff") {
@@ -637,56 +650,17 @@ function getActions(p) {
     }
     // Afficher le manifest
     ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p });
-    // Afficher l'image via le serveur d'images IIIF
-    ret.push({ label: 'Afficher l\'image avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg' });
-    // Afficher le info.json via le serveur d'images IIIF
-    ret.push({ label: 'Afficher le info.json', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json' });
+    if (utils.isimage(p)) {
+        // Afficher l'image via le serveur d'images IIIF
+      ret.push({ label: 'Afficher l\'image avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg' });
+      // Afficher le info.json via le serveur d'images IIIF
+      ret.push({ label: 'Afficher le info.json', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json' });
+    }
   }
 
 
   // On retourne la liste d'actions
   return ret;
-}
-
-// Retourne true si un viewer IIIF peut afficher le contenu
-// f est le nom du fichier
-function iiifViewable(f) {
-  return isimage(f) || isvideo(f) || isaudio(f) || isPDF(f);
-}
-
-// Retourne true si c'est un fichier PDF
-function isPDF(f) {
-  const ext = path.extname(f);
-  if (ext == undefined || ext == "") return false;
-  if (config.get("fileTypes")[ext] && config.get("fileTypes")[ext] == 'pdf') return true;
-  return false;
-}
-
-
-
-// Retourne true si c'est une vidéo
-function isvideo(f) {
-  const ext = path.extname(f);
-  if (ext == undefined || ext == "") return false;
-  if (config.get("fileTypes")[ext] && config.get("fileTypes")[ext] == 'video') return true;
-  return false;
-}
-
-// Retourne true si c'est un audio
-function isaudio(f) {
-  const ext = path.extname(f);
-  if (ext == undefined || ext == "") return false;
-  if (config.get("fileTypes")[ext] && config.get("fileTypes")[ext] == 'audio') return true;
-  return false;
-}
-
-function isimage(f) {
-  for (const ext of EXT_IMAGES) {
-    if (f.endsWith(ext)) {
-      return true;
-    }
-  }
-  return false;
 }
 
 app.get("/*", (req, res) => {
@@ -728,9 +702,9 @@ app.get("/*", (req, res) => {
                   });
                 }
                 resolve({
-                  name: f,
+                  name: getFilename(stats, f),
                   isdirectory: stats.isDirectory(),
-                  issmallimage: isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
+                  issmallimage: utils.isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
                   size: ((stats.size/1024/1024)).toLocaleString('fr-CA', {maximumSignificantDigits: 2}),
                   actions: getActions(res.filename + f),
                 });

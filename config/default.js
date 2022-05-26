@@ -24,6 +24,7 @@ module.exports = {
     '.ogg': 'video',
     '.mp3': 'audio',
     '.wav': 'audio',
+    '.m4a': 'audio',
     '.pdf': 'pdf'
   },
   iiifImageServerURL: 'http://localhost:8182/iiif/3/',

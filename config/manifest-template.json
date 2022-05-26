@@ -3,6 +3,7 @@
   "id": "",
   "type": "Manifest",
   "label": {"fr": [""] },
+  "behavior": ["paged"],
   "items": [
     {
       "id": "",

@@ -1,0 +1,24 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "",
+  "type": "Collection",
+  "label": {
+    "fr": [
+      ""
+    ]
+  },
+  "behavior": [
+    "together"
+  ],
+  "items": [
+    {
+      "id": "",
+      "type": "Manifest",
+      "label": {
+        "fr": [
+          ""
+        ]
+      }
+    }
+  ]
+}

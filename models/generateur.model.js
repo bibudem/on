@@ -4,10 +4,12 @@ const sizeOf = require('image-size')
 const mime = require('mime-types')
 const { getVideoDurationInSeconds } = require('get-video-duration')
 const { getAudioDurationInSeconds } = require('get-audio-duration')
-const manifestTemplate = require('../config/manifest-template.json')
+const singleManifestTemplate = require('../config/manifest-template.json')
+const directoryManifestTemplate = require('../config/directory-manifest-template.json')
 const config = require('config');
 const tiff = require('tiff');
 const PDFParser = require("pdf2json");
+const utils = require("../utils.js");
 
 const fileExists = async function (path) {
   return new Promise((resolve, reject) => {
@@ -57,7 +59,44 @@ module.exports = async function getManifest(path) {
     return null
   }
 
-  return getSingleImageManifest(path);
+  if (utils.isDirectory(thePath)) {
+    return getDirectoryManifest(path);
+  }
+  else {
+    // Manifest pour une ressource unique (un fichier)
+    return getSingleImageManifest(path);
+  }
+}
+
+/* Produit un manifest pour un dossier */
+async function getDirectoryManifest(path) {
+    // On va fabriquer l'ID de l'objet
+    let objectId = config.get("server.origin") + encodeURI(path);
+
+    // On charge le gabarit dans un objet qu'on va modifier
+    let manifest = JSON.parse(JSON.stringify(directoryManifestTemplate));
+    manifest.id = objectId;
+    manifest.label.fr[0] = "Manifest généré automatiquement pour " + path;
+
+    // Les items
+    let items = [];
+    let baseItem = manifest.items[0];
+
+    let files = fs.readdirSync(config.get("baseDir") + path);
+    for (let i=0; i<files.length; i++) {
+      if (utils.iiifViewable(path + "/" + files[i])) {
+        console.log("Oui: " + files[i]);
+        let currentItem = JSON.parse(JSON.stringify(baseItem));
+        currentItem.id = config.get("server.origin") + config.get('generateurURL') + encodeURI(path.substring(1) + "/" + files[i]);
+        currentItem.label.fr[0] = "Manifest généré automatiquement pour " + path + "/" + files[i];
+        items.push(currentItem);
+      }
+    }
+
+    // On ajoute les items et on retourne le manifest
+    manifest.items.pop();
+    manifest.items = items;
+    return manifest;
 }
 
 /* Produit un manifest pour une image, une vidéo ou un fichier sonore en
@@ -99,7 +138,7 @@ async function getSingleImageManifest(path) {
     let objectId = config.get("server.origin") + encodeURI(path);
 
     // On charge le gabarit dans un objet qu'on va modifier
-    let manifest = JSON.parse(JSON.stringify(manifestTemplate));
+    let manifest = JSON.parse(JSON.stringify(singleManifestTemplate));
 
     // Les informations de premier niveau
     manifest.id = objectId;
