@@ -136,7 +136,7 @@
             "options": {
                 "autocompleteAllowWords": false,
                 "bookmarkEnabled": false,
-                "downloadEnabled": true,
+                "downloadEnabled": false,
                 "embedEnabled": false,
                 "feedbackEnabled": false,
                 "fullscreenEnabled": true,
@@ -144,7 +144,7 @@
                 "moreInfoEnabled": true,
                 "openEnabled": false,
                 "printEnabled": false,
-                "shareEnabled": true
+                "shareEnabled": false
             },
             "content": {
                 "bookmark": "Ajouter aux favoris",
