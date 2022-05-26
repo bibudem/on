@@ -14,6 +14,7 @@ const assets = require("./assets");
 const archiver = require("archiver");
 const config = require('config');
 const utils = require("./utils.js");
+const { extname, join } = require('path');
 
 const notp = require("notp");
 
@@ -617,11 +618,33 @@ const SMALL_IMAGE_MAX_SIZE = config.get('smallImageMaxSize')
 // Retourne le nom du fichier à afficher dans l'explorateur
 // Si c'est dans le dossier des manifest, on parse le JSON,
 // Sinon on retourne le nom de fichier standard
-function getFilename(st, f) {
-  if (st.isDirectory()) {
-    return f;
+function getFilename(parent, f) {
+  let parentFolder = config.get("baseDir") + "/" + parent;
+  if (parentFolder === config.get("storeBaseDir") + "/") {
+    const ext = extname(f);
+    if (!ext || ext === '.json' || ext === '') {
+      try {
+        const contenu = fs.readFileSync(parentFolder + f);
+        const man = JSON.parse(contenu);
+        let ret = "";
+        const label = man.label;
+        if ( label ) {
+          // On a un label, on construit un nom en commençant par ça
+          if ( label.fr ) ret = label.fr[0];
+          else if ( label.en ) ret = label.en[0];
+          else { ret = f; }
+        }
+        else ret = f;
+        // On ajoute l'id et la date de modification
+        ret = ret + " (date: " + fs.statSync(parentFolder + f).mtime.toISOString() + "; id: " + f + ")";
+        return ret;
+      }
+      catch (err) {
+        return f;
+      }
+    }
   }
-  else return f;
+  return f;
 }
 
 // Retourne une liste d'actions à afficher pour un fichier ou un dossier
@@ -657,6 +680,15 @@ function getActions(p) {
     }
   }
 
+  // Si on est dans le dossier des manifest, on va permettre de les montrer
+  // dans un viewer IIIF
+  const parent = p.split('/')[0];
+  if (config.get("storeBaseDir") === config.get("baseDir") + "/" + parent ) {
+    // Ouvrir dans Mirador
+    ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('server.origin') + "/" + p });
+    // Ouvrir dans UniversalViewer
+    ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('server.origin') + "/" + p });
+  }
 
   // On retourne la liste d'actions
   return ret;
@@ -701,7 +733,8 @@ app.get("/*", (req, res) => {
                   });
                 }
                 resolve({
-                  name: getFilename(stats, f),
+                  name: getFilename(res.filename, f),
+                  href: f,
                   isdirectory: stats.isDirectory(),
                   issmallimage: utils.isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
                   size: ((stats.size/1024/1024)).toLocaleString('fr-CA', {maximumSignificantDigits: 2}),
