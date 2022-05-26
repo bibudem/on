@@ -11,7 +11,7 @@ $file.on("change", () => {
   fnElement.addClass("file-selected");
   fnElement.text(file.name);
 
-  $form.find("#upload-file-size").val(filesize(file.size));
+  $form.find("#upload-file-size").val(filesize(file.size, {locale: "fr", separator: ',', symbols: {GB: 'Go', MB: 'Mo', kB: 'Ko', B: 'o'}}));
   $form.find("[name=saveas]").val(file.name);
   $(".upload-unhide").fadeIn();
 });

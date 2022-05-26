@@ -737,7 +737,9 @@ app.get("/*", (req, res) => {
                   href: f,
                   isdirectory: stats.isDirectory(),
                   issmallimage: utils.isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
-                  size: ((stats.size/1024/1024)).toLocaleString('fr-CA', {maximumSignificantDigits: 2}),
+                  size: filesize(stats.size, {locale: "fr", separator: ',', symbols: {GB: 'Go', MB: 'Mo', kB: 'Ko', B: 'o'}}),
+//                  size: ((stats.size/1024/1024)).toLocaleString('fr-CA', {maximumSignificantDigits: 2}),
+                  rawsize: stats.size,
                   actions: getActions(res.filename + f),
                 });
               });
