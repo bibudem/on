@@ -681,7 +681,7 @@ function getActions(p) {
   // Si on est dans le dossier des manifest, on va permettre de les montrer
   // dans un viewer IIIF
   const parent = p.split('/')[0];
-  if (config.get("storeBaseDir") === config.get("baseDir") + "/" + parent ) {
+  if (config.get("storeBaseDir") === config.get("baseDir") + "/" + parent && parent != p ) {
     // Ouvrir dans Mirador
     ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('server.origin') + "/" + p });
     // Ouvrir dans UniversalViewer
