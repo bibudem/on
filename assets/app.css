@@ -9,7 +9,7 @@
 .options-container {
   display: none;
   position: absolute;
-  background-color: white;
+  background-color: #eeeeee;
   list-style: none;
   padding: 1em;
   z-index: 2000;

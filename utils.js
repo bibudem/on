@@ -3,6 +3,7 @@
 const config = require('config');
 const path = require("path");
 const fs = require("fs");
+const { extname } = require('path');
 
 
 
@@ -49,3 +50,24 @@ module.exports.isDirectory = function(path) {
     return st.isDirectory();
   }
   
+
+// Retourne une URL pour une vignette selon la nature de l'objet
+module.exports.getThumbURL = function(p) {
+
+    // Le cas des dossiers et des fichiers audios: on retourne une image spécifique
+    if (this.isDirectory(config.get("baseDir") + "/" + p)) return "/@assets/folder.svg";
+    if (this.isaudio(p)) return "/@assets/file-music.svg";
+
+    // Ce qui peut être servi par Cantaloupe
+    if (this.isimage(p) || this.isvideo(p) || this.isPDF(p)) return config.get("iiifImageServerURL") + p.replaceAll('/', '%2F') + "/full/!50,50/0/default.jpg";
+
+    // Le cas particulier du dossier des manifests
+    const parent = p.split('/')[0];
+    if (config.get("storeBaseDir") === config.get("baseDir") + "/" + parent ) {
+        const ext = path.extname(p);
+        if (ext === "" || ext === ".json") return "/@assets/iiif.png";
+    }
+
+    // Sinon on retourne un point d'interrogation
+    return "/@assets/question-square.svg";
+}

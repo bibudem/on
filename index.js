@@ -613,8 +613,6 @@ app.get('/a-propos', function (req, res) {
   res.render('a-propos')
 })
 
-const SMALL_IMAGE_MAX_SIZE = config.get('smallImageMaxSize')
-
 // Retourne le nom du fichier à afficher dans l'explorateur
 // Si c'est dans le dossier des manifest, on parse le JSON,
 // Sinon on retourne le nom de fichier standard
@@ -736,9 +734,8 @@ app.get("/*", (req, res) => {
                   name: getFilename(res.filename, f),
                   href: f,
                   isdirectory: stats.isDirectory(),
-                  issmallimage: utils.isimage(f) && stats.size < SMALL_IMAGE_MAX_SIZE,
+                  thumbURL: utils.getThumbURL(res.filename + f),
                   size: filesize(stats.size, {locale: "fr", separator: ',', symbols: {GB: 'Go', MB: 'Mo', kB: 'Ko', B: 'o'}}),
-//                  size: ((stats.size/1024/1024)).toLocaleString('fr-CA', {maximumSignificantDigits: 2}),
                   rawsize: stats.size,
                   actions: getActions(res.filename + f),
                 });
