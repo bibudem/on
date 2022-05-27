@@ -3,7 +3,7 @@
 <div style="padding-top: 56px; padding-bottom: 56px;">
 	<main class="container my-4">
 		<div class="row justify-content-center">
-			<div class="col col-lg-10 col-xl-8 col-xxl-8">
+			<div class="col col-lg-10 col-xl-8 col-xxl-8"  style="width: 80%;">
 				{{#each errors as |error|}}
 					<div class="alert alert-danger" role="alert">
 						{{error}}
@@ -17,7 +17,7 @@
 				<ul class="list-group">
 				{{#each files}}
 					<li class="list-group-item">
-						<div class="form-check">
+						<div class="form-check" style="overflow: scroll; height: 50px;">
 							<input type="checkbox" class="form-check-input multi-select" data-select="{{href}}" data-select-size="{{rawsize}}" data-select-type="{{#if isdirectory}}directory{{else}}file{{/if}}" id="check{{@index}}">
 							<span class="file-or-dir form-check-label d-flex align-items-start justify-content-between">
 								{{#if error}}
