@@ -32,5 +32,7 @@ module.exports = {
   uvURL: '/universalviewer/',
   osdURL: '/openseadragon/',
   storeBaseDir: 'd:\\projets\\on\\public\\data\\cs\\_manifests',
+  manifestCacheDir: 'd:\\projets\\on\\public\\data\\cs\\manifest-cache',
+  useCache: false,
   storeURL: 'https://oncs.bib.umontreal.ca/manifest-store'
 }

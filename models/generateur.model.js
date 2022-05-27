@@ -98,9 +98,62 @@ async function getDirectoryManifest(path) {
     return manifest;
 }
 
+/* Retourne un manifest en cache s'il est disponible.
+    Retourne null sinon. */
+function getManifestFromCache(p) {
+
+  // On véfifie d'abord la config
+  if (!config.get("useCache")) return null;
+
+  // Ensuite on vérifie si on l'a en cache
+  try {
+    const thePath = getManifestCachePath(p);
+    if (fs.existsSync(thePath)) {
+      const originalPath = config.get("baseDir") + p;
+      if (fs.statSync(thePath).mtimeMs >  fs.statSync(originalPath).mtimeMs) {
+        // La cache est plus récente, on la retoure
+        return JSON.parse(fs.readFileSync(thePath));
+      }
+      else {
+        // La cache est plus ancienne on ne le retourne pas
+        return null;
+      }
+    }
+  }
+  catch {
+    // En cas d'erreur on retourne tout simplement null, comme si pas d'objet en cache
+    return null;
+  }
+
+  // On n'a pas le fichier en cache
+  return null;
+}
+
+/* Stocke le manifeste en cache */
+function saveManifestInCache(p, manifest) {
+  if (config.get("useCache")) {
+    try {
+      fs.writeFileSync(getManifestCachePath(p), JSON.stringify(manifest));    
+    }
+    catch {
+      return;
+    }
+  }
+}
+
+/* Retourne le chemin complet d'un manifest en cache */
+function getManifestCachePath(p) {
+  return config.get("manifestCacheDir") + "/" + p.substring(1).replace('/', '%2F') + ".json";
+}
+
 /* Produit un manifest pour une image, une vidéo ou un fichier sonore en
     fonction d'un gabarit en config. */
 async function getSingleImageManifest(path) {
+
+  // On va d'abord vérifier la cache
+  let manifest = getManifestFromCache(path);
+  if (manifest) return manifest;
+
   try {
     // On doit d'abord déterminer le nombre d'images ou de pages dans l'objet
     let nbPages = 1;
@@ -137,7 +190,7 @@ async function getSingleImageManifest(path) {
     let objectId = config.get("server.origin") + encodeURI(path);
 
     // On charge le gabarit dans un objet qu'on va modifier
-    let manifest = JSON.parse(JSON.stringify(singleManifestTemplate));
+    manifest = JSON.parse(JSON.stringify(singleManifestTemplate));
 
     // Les informations de premier niveau
     manifest.id = objectId;
@@ -256,6 +309,9 @@ async function getSingleImageManifest(path) {
         serv.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replace("/", "%2f") + pageIndex;
       }
     }
+
+    // On sauvegarde en cache
+    saveManifestInCache(path, manifest);
 
     // On a terminé on retourne notre objet
     return manifest;
