@@ -1,0 +1,104 @@
+{{> navbar path=path}}
+
+<div style="padding-top: 56px; padding-bottom: 56px;" class="container my-4">
+  <h1>Utilisation du <i>Carré de sable IIF des bibliothèques de l'UdeM</i></h1>
+
+  <p>Si vous avez des questions ou si vous souhaitez discuter de ce carré
+      de sable, vous pouvez rejoindre l'équipe
+      "<a target="_blank" href="https://teams.microsoft.com/l/channel/19%3ayJ2YodjabWc8QTcXe4baravITqAwxEWT6kA6lw90QnY1%40thread.tacv2/G%25C3%25A9n%25C3%25A9ral?groupId=dae7ec0d-9a89-4cf1-bb09-6d43c236ea77&tenantId=d27eefec-2a47-4be7-981e-0f8977fa31d8">Gr - Bib - Carré de sable IIIF"</a>
+      dans l'environnement Teams de l'UdeM.
+  </p>
+
+  <h3>Gestion des fichiers et dossiers</h3>
+  <p>
+    Le carré de sable contient déjà certains dossiers et fichiers. Mais vous
+    pouvez en ajouter, supprimer, renommer en utilisant les fonctions en bas de
+    l'écran.
+  </p>
+  <p>
+    Règles à suivre:
+  </p>
+  <ul>
+    <li>Merci de ne supprimer ou renommer que les fichiers et dossiers que vous
+        avez déposés ou créés. Respectez le travail des autres!
+    </li>
+    <li>Ne jamais utiliser un tiret bas (<b>_</b>) en début de nom de fichier ou de dossier.</li>
+    <li>Ne pas créer de dossier nommé <i>cantaloupe</i> à la racine du carré de sable.</li>
+  </ul>
+  <h3>Actions de base</h3>
+  <ul>
+    <li>Cliquer sur le nom du fichier pour afficher le contenu dans le navigateur (aucune fonction IIIF).</li>
+    <li>Cliquer sur le nom du dossier pour afficher son contenu.</li>
+    <li>Utiliser le fil d'ariane en haut de page pour revenir en arrière.</li>
+  </ul>
+  <p>
+    La plupart des fichiers et dossiers déposés dans le carré de sable auront un
+    menu <i>actions</i> représenté par l'icône 
+    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"></path>
+    </svg> . Cliquer sur ce menu pour voir les actions disponibles et les exécuter.
+    Les actions sont définies dans les sections ci-dessous.
+  </p>
+  <h3>Actions sur les fichiers</h3>
+  <p>Les actions pour les fichiers dépendent du format du fichier.</p>
+  <p>Pour les images (JPEG, JPEG2000, TIFF, PNG, PDF)</p>
+  <ul>
+    <li><i>Ouvrir dans Mirador : </i> avec le <i>manifest</i> fabriqué
+        automatiquement, ouvre l'image dans le visualiseur IIIF Mirador.</li>
+    <li><i>Ouvrir dans UniversalViewer : </i> avec le <i>manifest</i> fabriqué
+        automatiquement, ouvre l'image dans le visualiseur IIIF UniversalViewer.</li>
+    <li><i>Ouvrir dans OpenSeaDragon : </i> ouvre l'image (issue du serveur d'images)
+       dans le visualiseur d'images OpenSeaDragon.</li>
+    <li><i>Afficher le manifest : </i> ouvre une fenêtre qui affiche le fichier
+          manifest.json généré automatiquement pour cette image.</li>
+    <li><i>Afficher l'image avec le serveur d'images IIIF : </i> ouvre un fenêtre qui
+          affiche l'image depuis le serveur d'images (Cantaloupe), avec les paramètres
+          par défaut. Modifier l'URL de cette image pour voir les transformations
+          appliquées à l'image.</li>
+    <li><i>Afficher le info.json : </i>ouvre une nouvelle fenêtre avec le fichier info.json
+          qui est produit automatiquement par le serveur d'images pour cette image.</li>
+  </ul>
+  <p>Pour les vidéos et les fichiers audios:</p>
+  <ul>
+    <li><i>Ouvrir dans Mirador : </i> avec le <i>manifest</i> fabriqué
+        automatiquement, ouvre la vidéo ou le fichier audio dans le visualiseur IIIF Mirador.</li>
+    <li><i>Ouvrir dans UniversalViewer : </i> avec le <i>manifest</i> fabriqué
+        automatiquement, ouvre la vidéo ou le fichier audio dans le visualiseur IIIF UniversalViewer.</li>
+    <li><i>Afficher le manifest : </i> ouvre une fenêtre qui affiche le fichier
+          manifest.json généré automatiquement pour cette vidéo ou ce fichier audio .</li>
+  </ul>
+  <h3>Actions sur les dossiers</h3>
+  <p>Le carré de sable peut fabriquer automatiquement un fichier <i>manifest.json</i>
+      pour un dossier. Ce fichier représente une collection et il contiendra un lien
+      vers le manifest de chaque objet dans le dossier.</p>
+  <p>Les actions possibles proposées consistent donc à afficher ce manifest ou l'ouvrir
+      dans Mirador ou UniversalViewer.
+  </p>
+  <h3>Dossier des <i>manifests</i></h3>
+  <p>
+    À la racine, le dossier <i>_manifests</i> joue un rôle particulier. Il est destiné
+    à contenir des fichiers manifest.json qui sont produits manuellement. Vous pouvez
+    en déposer en vous assurant que votre fichier a l'extension <i>.json</i>.
+  </p>
+  <p>
+    Prochainement, un éditeur de manifest sera proposé dans le carré de sable et il
+    permettra de stocker les manifests produits dans ce dossier.
+  </p>
+
+  <p>
+      En quelques mots, ce carré de sable vous permet de déposer des fichiers 
+      (images, vidéos, sons, PDF, ...) et d'explorer le protocole IIIF sur ces fichiers:      
+  </p>
+  <ul>
+    <li>Voir ce fichier dans un visualiseur IIIF comme Mirador, UniversalViewer
+        ou dans un visualiseur d'images comme OpenSeaDragon.
+    </li>
+    <li>
+      Afficher une image via le serveur d'images IIIF Cantaloupe.
+    </li>
+    <li>
+      Afficher un manifest.json produit automatiquement pour cet objet.
+    </li>
+  </ul>
+  <p>Bientôt, vous pourrez également créer des manifest.json et les stocker.</p> 
+</div>

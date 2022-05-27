@@ -612,6 +612,9 @@ if (shellable || cmdable) {
 app.get('/_a-propos', function (req, res) {
   res.render('a-propos')
 })
+app.get('/_manuel', function (req, res) {
+  res.render('manuel')
+})
 
 // Retourne le nom du fichier à afficher dans l'explorateur
 // Si c'est dans le dossier des manifest, on parse le JSON,
