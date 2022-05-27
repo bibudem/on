@@ -609,7 +609,7 @@ if (shellable || cmdable) {
   });
 }
 
-app.get('/a-propos', function (req, res) {
+app.get('/_a-propos', function (req, res) {
   res.render('a-propos')
 })
 
