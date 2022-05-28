@@ -256,7 +256,8 @@ app.post("/*@upload", (req, res) => {
         if (err) {
           return reject(err);
         }
-        return resolve(stats);
+        return reject(err); // Pour permettre de rempalcer un fichier; hack pas très joli
+//        return resolve(stats);
       });
     });
 
