@@ -785,6 +785,7 @@ app.get("/*", (req, res) => {
         );
       });
   } else if (res.stats.isFile()) {
+    utils.setContentType(res);
     res.sendFile(relative(res.filename), {
       headers: {
         "Content-Security-Policy":

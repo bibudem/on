@@ -71,3 +71,14 @@ module.exports.getThumbURL = function(p) {
     // Sinon on retourne un point d'interrogation
     return "/@assets/question-square.svg";
 }
+
+// Retourne le content-type d'une ressource
+// On va simplement le modifier dans le cas du dossier _manifests
+// pour les fichiers sans extensions...
+module.exports.setContentType = function(res) {
+    const parent = res.filename.split('/')[0];
+    if (config.get("storeBaseDir") === config.get("baseDir") + "/" + parent ) {
+        const ext = path.extname(res.filename);
+        if (ext === "") res.contentType("application/json");
+    }
+}
