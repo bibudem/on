@@ -657,6 +657,14 @@ function getActions(p) {
 
   // Les actions pour les objets que l'on peut consulter dans un viewer IIIF
   if (utils.iiifViewable(p)) {
+    if (utils.isimage(p)) {
+      // Afficher le info.json via le serveur d'images IIIF
+      ret.push({ label: 'Afficher le info.json', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json' });
+      // Afficher l'image via le serveur d'images IIIF
+      ret.push({ label: 'Afficher avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg' });
+    }
+    // Afficher le manifest
+    ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p });
     // Ouvrir dans Mirador
     ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p });
     // Ouvrir dans UniversalViewer
@@ -671,14 +679,6 @@ function getActions(p) {
       }
       let infoURL = config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json&nb=' + nbPages);
       ret.push({ label: 'Ouvrir dans OpenSeaDragon', href: infoURL });
-    }
-    // Afficher le manifest
-    ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p });
-    if (utils.isimage(p)) {
-        // Afficher l'image via le serveur d'images IIIF
-      ret.push({ label: 'Afficher l\'image avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg' });
-      // Afficher le info.json via le serveur d'images IIIF
-      ret.push({ label: 'Afficher le info.json', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json' });
     }
   }
 
