@@ -82,3 +82,10 @@ module.exports.setContentType = function(res) {
         if (ext === "") res.contentType("application/json");
     }
 }
+
+module.exports.userCanEdit = function(r) {
+    console.log("r.ip = " + r.ip);
+    console.log("r.ips = " + JSON.stringify(r.ips));
+    return true;
+//    return r.ip.startsWith("132.204" || r.ip.startsWith("10."));
+}

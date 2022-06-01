@@ -756,6 +756,7 @@ app.get("/*", (req, res) => {
               flashify(req, {
                 shellable: shellable,
                 cmdable: cmdable,
+                canEdit: utils.userCanEdit(req),
                 path: res.filename,
                 files: files,
               })
