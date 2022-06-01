@@ -674,8 +674,10 @@ function getActions(p) {
       let nbPages = 1;
       let mimeType = mime.lookup(p);
       if (mimeType === "image/tiff") {
-        let dataBuffer = fs.readFileSync(config.get("baseDir") + "/" + p);
-        nbPages = tiff.pageCount(dataBuffer);
+        if (fs.statSync(config.get("baseDir") + "/" + p).size < 2 * 1024 * 1024 * 1024) {
+            let dataBuffer = fs.readFileSync(config.get("baseDir") + "/" + p);
+            nbPages = tiff.pageCount(dataBuffer);
+          }
       }
       let infoURL = config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json&nb=' + nbPages);
       ret.push({ label: 'Ouvrir dans OpenSeaDragon', href: infoURL });

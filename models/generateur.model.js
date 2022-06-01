@@ -171,9 +171,11 @@ async function getSingleImageManifest(path) {
 
     // Le traitement des TIFF, qui peuvent avoir plusieurs pages/images
     if (mimeType === "image/tiff") {
-      let dataBuffer = fs.readFileSync(config.get("baseDir") + path);
-      nbPages = tiff.pageCount(dataBuffer);
-      imgPages = tiff.decode(dataBuffer);
+      if (fs.statSync(config.get("baseDir") + path) < 2 * 1024 * 1024 * 1024 ) {
+        let dataBuffer = fs.readFileSync(config.get("baseDir") + path);
+        nbPages = tiff.pageCount(dataBuffer);
+        imgPages = tiff.decode(dataBuffer);
+      }
     }
 
     // Ensuite déterminer la taille de l'image
