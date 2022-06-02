@@ -5,6 +5,10 @@ const getModel = require('../models/generateur.model')
 const router = Router();
 
 router.get('/*', async function (req, res, next) {
+  if (req.method === "GET") {
+    res.header('Access-Control-Allow-Origin', '*');
+//    return next();
+  }
   const model = await getModel(req.url)
   if (model) {
     res.send(model)
