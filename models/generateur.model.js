@@ -51,6 +51,10 @@ const getPDFImageSizes = async function testGetImageSizes(obj) {
 
 module.exports = async function getManifest(path) {
   path = decodeURI(path);
+  // On accepte les URI qui se terminent en .json
+  if (path.endsWith(".json")) {
+    path = path.substring(0, path.length - 5);
+  }
   const thePath = config.get('baseDir') + path;
   try {
     await fileExists(thePath)

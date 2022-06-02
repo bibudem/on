@@ -664,11 +664,11 @@ function getActions(p) {
       ret.push({ label: 'Afficher avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg' });
     }
     // Afficher le manifest
-    ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p });
+    ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p + ".json"});
     // Ouvrir dans Mirador
-    ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p });
+    ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p + ".json"});
     // Ouvrir dans UniversalViewer
-    ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p });
+    ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p  + ".json"});
     // Ouvrir dans OpenSeaDragon
     if (utils.isimage(p)) {
       let nbPages = 1;
