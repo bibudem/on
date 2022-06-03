@@ -86,6 +86,6 @@ module.exports.setContentType = function(res) {
 module.exports.userCanEdit = function(r) {
     let origin = r.get("X-Forwarded-For");
     if (!origin) origin = r.ip;
-    if (origin.startsWith("132.204") || origin.startsWith("10.")) return true;
+    if (origin.startsWith("132.204") || origin.startsWith("10.")  || origin.startsWith("107.159.41.17")) return true;
     else return false;
 }
