@@ -22,6 +22,8 @@ const fs = require("fs");
 const rimraf = require("rimraf");
 const path = require("path");
 
+const dotFile = require('./middlewares/dotFile')
+
 const mime = require('mime-types');
 const tiff = require('tiff');
 const filesize = require("filesize");
@@ -81,6 +83,8 @@ app.engine(
   })
 );
 app.set("view engine", "handlebars");
+
+app.use(dotFile)
 
 app.use('/manifest-store', manifestStoreRouter)
 
