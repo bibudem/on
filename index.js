@@ -160,10 +160,10 @@ app.use((req, res, next) => {
 
 function relative(...paths) {
   const finalPath = paths.reduce((a, b) => path.join(a, b), config.get('baseDir'));
-/*  if (path.relative(process.cwd(), finalPath).startsWith("..")) {
-    throw new Error("Failed to resolve path outside of the working directory");
-  }
-*/
+  /*  if (path.relative(process.cwd(), finalPath).startsWith("..")) {
+      throw new Error("Failed to resolve path outside of the working directory");
+    }
+  */
   return finalPath;
 }
 function flashify(req, obj) {
@@ -261,7 +261,7 @@ app.post("/*@upload", (req, res) => {
           return reject(err);
         }
         return reject(err); // Pour permettre de rempalcer un fichier; hack pas très joli
-//        return resolve(stats);
+        //        return resolve(stats);
       });
     });
 
@@ -634,10 +634,10 @@ function getFilename(parent, f) {
         const man = JSON.parse(contenu);
         let ret = "";
         const label = man.label;
-        if ( label ) {
+        if (label) {
           // On a un label, on construit un nom en commençant par ça
-          if ( label.fr ) ret = label.fr[0];
-          else if ( label.en ) ret = label.en[0];
+          if (label.fr) ret = label.fr[0];
+          else if (label.en) ret = label.en[0];
           else { ret = f; }
         }
         else ret = f;
@@ -668,20 +668,20 @@ function getActions(p) {
       ret.push({ label: 'Afficher avec le serveur d\'images IIIF', href: config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/full/max/0/default.jpg' });
     }
     // Afficher le manifest
-    ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p + ".json"});
+    ret.push({ label: 'Afficher le manifest', href: config.get('generateurURL') + p + ".json" });
     // Ouvrir dans Mirador
-    ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p + ".json"});
+    ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('generateurURL') + p + ".json" });
     // Ouvrir dans UniversalViewer
-    ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p  + ".json"});
+    ret.push({ label: 'Ouvrir dans UniversalViewer', href: config.get('uvURL') + '?manifest=' + config.get('generateurURL') + p + ".json" });
     // Ouvrir dans OpenSeaDragon
     if (utils.isimage(p)) {
       let nbPages = 1;
       let mimeType = mime.lookup(p);
       if (mimeType === "image/tiff") {
         if (fs.statSync(config.get("baseDir") + "/" + p).size < 2 * 1024 * 1024 * 1024) {
-            let dataBuffer = fs.readFileSync(config.get("baseDir") + "/" + p);
-            nbPages = tiff.pageCount(dataBuffer);
-          }
+          let dataBuffer = fs.readFileSync(config.get("baseDir") + "/" + p);
+          nbPages = tiff.pageCount(dataBuffer);
+        }
       }
       let infoURL = config.get('osdURL') + '?info=' + encodeURI(config.get('iiifImageServerURL') + p.replaceAll('/', '%2F') + '/info.json&nb=' + nbPages);
       ret.push({ label: 'Ouvrir dans OpenSeaDragon', href: infoURL });
@@ -691,7 +691,7 @@ function getActions(p) {
   // Si on est dans le dossier des manifest, on va permettre de les montrer
   // dans un viewer IIIF
   const parent = p.split('/')[0];
-  if (config.get("storeBaseDir") === config.get("baseDir") + "/" + parent && parent != p ) {
+  if (config.get("storeBaseDir") === config.get("baseDir") + "/" + parent && parent != p) {
     // Ouvrir dans Mirador
     ret.push({ label: 'Ouvrir dans Mirador', href: config.get('miradorURL') + '?manifest=' + config.get('server.origin') + "/" + p });
     // Ouvrir dans UniversalViewer
@@ -723,6 +723,9 @@ app.get("/*", (req, res) => {
         if (err) {
           return reject(err);
         }
+        filenames = filenames.filter(f => {
+          return !f.startsWith('.')
+        })
         return resolve(filenames);
       });
     });
@@ -745,7 +748,7 @@ app.get("/*", (req, res) => {
                   href: f,
                   isdirectory: stats.isDirectory(),
                   thumbURL: utils.getThumbURL(res.filename + f),
-                  size: filesize(stats.size, {locale: "fr", separator: ',', symbols: {GB: 'Go', MB: 'Mo', kB: 'Ko', B: 'o'}}),
+                  size: filesize(stats.size, { locale: "fr", separator: ',', symbols: { GB: 'Go', MB: 'Mo', kB: 'Ko', B: 'o' } }),
                   rawsize: stats.size,
                   actions: getActions(res.filename + f),
                 });
