@@ -30,6 +30,7 @@ const filesize = require("filesize");
 const octicons = require("@primer/octicons");
 const handlebars = require("handlebars");
 
+const { fileExists, relative } = require('./lib/file.js')
 const console = require('./lib/console')
 
 const port = config.get('server.port');
@@ -158,14 +159,6 @@ app.use((req, res, next) => {
   res.redirect("/@login");
 });
 
-function relative(...paths) {
-  const finalPath = paths.reduce((a, b) => path.join(a, b), config.get('baseDir'));
-  /*  if (path.relative(process.cwd(), finalPath).startsWith("..")) {
-      throw new Error("Failed to resolve path outside of the working directory");
-    }
-  */
-  return finalPath;
-}
 function flashify(req, obj) {
   let error = req.flash("error");
   if (error && error.length > 0) {
@@ -207,17 +200,7 @@ app.use((req, res, next) => {
 app.all("/*", (req, res, next) => {
   res.filename = req.params[0];
 
-  let fileExists = new Promise((resolve, reject) => {
-    // check if file exists
-    fs.stat(relative(res.filename), (err, stats) => {
-      if (err) {
-        return reject(err);
-      }
-      return resolve(stats);
-    });
-  });
-
-  fileExists
+  fileExists(res.filename)
     .then((stats) => {
       res.stats = stats;
       next();
@@ -265,7 +248,7 @@ app.post("/*@upload", (req, res) => {
       });
     });
 
-    fileExists
+    fileExists(res.filename)
       .then((stats) => {
         console.warn("file exists, cannot overwrite");
         req.flash("error", "Le fichier existe, on ne peut le remplacer.");
@@ -307,17 +290,7 @@ app.post("/*@mkdir", (req, res) => {
     return res.status(400).end();
   }
 
-  let fileExists = new Promise((resolve, reject) => {
-    // Check if file exists
-    fs.stat(relative(res.filename, folder), (err, stats) => {
-      if (err) {
-        return reject(err);
-      }
-      return resolve(stats);
-    });
-  });
-
-  fileExists
+  fileExists(res.filename)
     .then((stats) => {
       req.flash("error", "Folder exists, cannot overwrite. ");
       res.redirect("back");
