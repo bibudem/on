@@ -79,7 +79,7 @@ async function getDirectoryManifest(path) {
 
     // On charge le gabarit dans un objet qu'on va modifier
     let manifest = JSON.parse(JSON.stringify(directoryManifestTemplate));
-    manifest.id = objectId;
+    manifest.id = objectId + ".json";
     manifest.label.fr[0] = "Manifest généré automatiquement pour " + path;
 
     // Les items
@@ -147,7 +147,7 @@ function saveManifestInCache(p, manifest) {
 
 /* Retourne le chemin complet d'un manifest en cache */
 function getManifestCachePath(p) {
-  return config.get("manifestCacheDir") + "/" + p.substring(1).replace('/', '%2F') + ".json";
+  return config.get("manifestCacheDir") + "/" + p.substring(1).replaceAll('/', '%2F') + ".json";
 }
 
 /* Produit un manifest pour une image, une vidéo ou un fichier sonore en
@@ -283,7 +283,7 @@ async function getSingleImageManifest(path) {
       else {
         delete body.duration;
         body.type = "Image";
-        body.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replace("/", "%2f") + pageIndex + "/full/max/0/default.jpg";
+        body.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replaceAll("/", "%2f") + pageIndex + "/full/max/0/default.jpg";
         body.height = imgHeight;
         body.width = imgWidth;  
       }
@@ -307,12 +307,12 @@ async function getSingleImageManifest(path) {
         };
         thumb.height = thumbHeight;
         thumb.width = thumbWidth;
-        thumb.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replace("/", "%2f") + pageIndex + "/full/" + thumbSizeURL + "/0/default.jpg";
+        thumb.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replaceAll("/", "%2f") + pageIndex + "/full/" + thumbSizeURL + "/0/default.jpg";
   
   
         // Maintenant on indique que c'est un service IIIF
         let serv = body.service[0];
-        serv.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replace("/", "%2f") + pageIndex;
+        serv.id = config.get("iiifImageServerURL") + encodeURI(path.substring(1)).replaceAll("/", "%2f") + pageIndex;
       }
     }
 
